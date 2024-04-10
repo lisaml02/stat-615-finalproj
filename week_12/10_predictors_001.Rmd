@@ -1,0 +1,292 @@
+---
+title: "Predictors"
+author: "David Gerard"
+date: "`r Sys.Date()`"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# Quadratic Predictors
+
+```{r}
+library(tidyverse)
+library(broom)
+muscle <- read_csv("https://dcgerard.github.io/stat_415_615/data/muscle.csv")
+```
+
+```{r}
+ggplot(muscle, aes(x = age, y = mass)) +
+  geom_point()
+```
+
+Create a new varible which is age^2
+```{r}
+muscle <- mutate(muscle, age2 = age^2)
+```
+Then fit the multiple linear regression model with age and age^2 as predictors
+```{r}
+lm_quad <- lm(mass ~ age + age2, data = muscle)
+tidy(lm_quad)
+```
+
+There is a shorthand that lets you do the transformation inside lm().
+
+This does not work
+```{r}
+lm_bad <- lm(mass ~ age + age^2, data = muscle)
+tidy(lm_bad)
+```
+
+Use `I()` (as is) to force the transformation inside lm()
+```{r}
+lm_good <- lm(mass ~ age + I(age^2), data = muscle)
+tidy(lm_good)
+```
+
+Make predictions in the first way:
+```{r}
+newdf <- data.frame(age = 70, age2 = 70^2)
+predict(lm_quad, newdf)
+```
+
+Make predictions the second way:
+```{r}
+newdf <- data.frame(age = 70)
+predict(lm_good, newdf)
+```
+
+You can use I() inside geom_smooth()
+```{r}
+ggplot(muscle, aes(x = age, y = mass)) +
+  geom_point() +
+  geom_smooth(method = "lm",
+              formula = y ~ x + I(x^2))
+```
+
+Don't include higher order terms than squares in a linear model.
+Typically, you don't need to have more flexible modeling, but if you do, use splines
+```{r}
+library(splines)
+lm_spline <- lm(mass ~ bs(age, df = 4), data = muscle)
+tidy(lm_spline)
+```
+
+
+```{r}
+ggplot(muscle, aes(x = age, y = mass)) +
+  geom_point() +
+  geom_smooth(method = "lm",
+              formula = y ~ bs(x, df = 4))
+```
+
+Make a prediction based on the spline fit
+```{r}
+newdf <- data.frame(age = 70)
+predict(lm_spline, newdf)
+```
+
+
+
+# Categorical variables and indicators (again)
+
+```{r}
+firm <- read_csv("https://dcgerard.github.io/stat_415_615/data/firm.csv")
+glimpse(firm)
+```
+
+```{r}
+library(GGally)
+ggpairs(firm)
+```
+
+
+```{r}
+ggplot(firm, aes(x = size, y = months, color = type)) +
+  geom_point() +
+  geom_smooth(method = "lm", se = FALSE)
+```
+
+
+To fit this, just include the two predictors in lm()
+The default is to set the base class to the first in alphabetical order (mutual) and so the indicator is for stock.
+```{r}
+lm_firm <- lm(months ~ type + size, data = firm)
+tidy(lm_firm)
+```
+
+Set base class explicitly to stock if I want an indicator for mutual
+This sets the base class to stock, so the indicator is mutual
+```{r}
+firm <- mutate(firm, 
+               type = factor(type),
+               type = fct_relevel(type, "stock"))
+lm_firm <- lm(months ~ type + size, data = firm)
+tidy(lm_firm)
+```
+
+
+More than two classes:
+
+```{r}
+data("mpg")
+unique(mpg$drv)
+```
+
+```{r}
+ggplot(mpg, aes(x = displ, y = cty, color = drv)) +
+  geom_point() +
+  geom_smooth(method = "lm", se = FALSE)
+```
+
+Let's fit the parallel lines model in R
+```{r}
+lm_mpg <- lm(cty ~ drv + displ, data = mpg)
+tidy(lm_mpg)
+```
+
+Let's relevel
+```{r}
+mpg <- mutate(mpg, drv = factor(drv, levels = c("r", "f", "4")))
+lm_mpg <- lm(cty ~ drv + displ, data = mpg)
+tidy(lm_mpg)
+```
+
+Q: What is the predicted mpg of a 4-wheel drive car with a displacement of 3L (don't use predict() here)
+
+# Interactions
+
+From the mtcars data
+```{r}
+data(mtcars)
+```
+Let's fit an interaction term between wt and drat with a response variable of mpg
+
+```{r}
+lm_int1 <- lm(mpg ~ drat + wt + drat:wt, data = mtcars)
+tidy(lm_int1)
+```
+
+A quicker and safer way to fit interactions is to use *
+- It will fit the interaction and all lower order terms
+```{r}
+lm_int2 <- lm(mpg ~ drat * wt, data = mtcars)
+tidy(lm_int2)
+```
+
+How do you interpret interaction effects:
+1. You don't
+2. The best way to interpret relationships is to make conditional effects plots
+
+# Interactions and categorical variables
+
+```{r}
+ggplot(mpg, aes(x = displ, y = cty, color = drv)) +
+  geom_point() +
+  geom_smooth(method = "lm", se = FALSE)
+```
+
+Fit using same approach with *
+```{r}
+lm_mpg_int <- lm(cty ~ drv * displ, data = mpg)
+tidy(lm_mpg_int)
+```
+
+These don't test for an interaction between drv and displacement
+
+We need an F-test to do that
+The above is the full model fit
+The reduced model fit is the "parallel lines model" with no interactions
+
+```{r}
+lm_mpg_parallel <- lm(cty ~ drv + displ, data = mpg)
+```
+
+```{r}
+anova(lm_mpg_parallel, lm_mpg_int)
+```
+
+# Saturated second-order model
+
+```{r}
+power <- tibble::tribble(
+  ~cycles, ~charge, ~temp,
+      150,     0.6,    10,
+       86,       1,    10,
+       49,     1.4,    10,
+      288,     0.6,    20,
+      157,       1,    20,
+      131,       1,    20,
+      184,       1,    20,
+      109,     1.4,    20,
+      279,     0.6,    30,
+      235,       1,    30,
+      224,     1.4,    30
+  )
+power <- relocate(power, cycles, .after = everything())
+ggpairs(power)
+```
+
+
+```{r}
+lm_cycles <- lm(cycles ~ charge + temp, data = power)
+aout <- augment(lm_cycles)
+ggplot(aout, aes(x = .fitted, y = .resid)) +
+  geom_point() +
+  geom_hline(yintercept = 0)
+```
+
+
+Let's fit a saturated second-order model
+```{r}
+lm_power_sat <- lm(cycles ~ charge * temp + I(charge^2) + I(temp^2), data = power)
+```
+
+```{r}
+anova(lm_cycles, lm_power_sat)
+```
+
+No evidence of a lack-of-fit
+
+
+
+
+```{r}
+library(tidyverse)
+library(broom)
+soap <- read_csv("https://dcgerard.github.io/stat_415_615/data/soap.csv")
+ggplot(soap, aes(x = speed, y = scrap, color = line)) +
+  geom_point() +
+  geom_smooth(method = "lm", se = FALSE)
+```
+
+Xi1 is an indicator for line 2 (1 if line 2, 0 otherwise)
+Xi2 is speed
+Yi is scrap
+$Y_i = \beta_0 + \beta_1X_{i1} + \beta_2X_{i2} + \beta_{12}X_{i1}X_{i2} + \epsilon_i$
+
+```{r}
+lm_int <- lm(scrap ~ line * speed, data = soap)
+tidy(lm_int)
+```
+
+We do not have evidence that the slopes are different (p = 0.18) 
+
+
+```{r}
+lm_simp <- lm(scrap ~ line + speed, data = soap)
+tidy(lm_simp, conf.int = TRUE)
+```
+
+
+
+We have strong evidence that the lines have different scrap amounts, adjusting for speed (p = 1.1e-6). We estimate that line 2 produces 53.1 less scrap on average (95% CI: 36.1 less to 70.1 less)
+
+
+
+
+
+
+

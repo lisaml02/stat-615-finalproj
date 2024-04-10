@@ -1,0 +1,185 @@
+---
+title: "r_visualization_review"
+author: "lisa liubovich"
+date: "2024-01-17"
+output: pdf_document
+url: "blue"
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+# options(repos = c(CRAN = "https://cloud.r-project.org/")) only need this if installing packages 
+```
+
+```{r}
+library(ggplot2)
+library(dplyr)
+# ctrl alt I is insert code chunk
+# message = FALSE inside the {r} will get rid of the messages that library(tidyverse) generates
+```
+
+## formatting
+
+hyperlinks are included like this [Google] (<https://www.google.com>)
+
+or we can include URLs directly like this <https://www.google.com>
+
+# **visualization review (ggplot2)**
+
+```{r}
+data(mpg, package = "ggplot2")
+glimpse(mpg)
+```
+
+## one variable
+
+```{r}
+#continuous
+ggplot(data = mpg, mapping = aes(x = hwy, color = drv)) +
+  geom_histogram()
+
+ggplot(data = mpg, mapping = aes(x = hwy)) +
+  geom_histogram(bins = 10, color = "black", fill = "white")
+```
+
+**Exercise**: Load in the [estate](https://dcgerard.github.io/stat_415_615/data/estate.csv) data (see [here](https://dcgerard.github.io/stat_415_615/data.html#real-estate-sales) for a description) and make a histogram of price with 20 bins. Make the bins red
+
+```{r exercise}
+estate <- read_csv(file = "./week_1/estate.csv")
+```
+
+```{r exercise}
+ggplot(estate, mapping = aes(x = price)) +
+  geom_histogram(bins = 20, color = "black", fill = "red")
+```
+
+```{r}
+# discrete
+ggplot(data = mpg, mapping = aes(x = drv)) +
+  geom_bar()
+```
+
+-   **Exercise**: What variables from the estate data are appropriately plotted using a bar plot? Plot them.
+
+```{r exercise}
+ggplot(estate, mapping = aes(x = bed)) +
+  geom_bar()
+```
+
+```{r exercise}
+ggplot(estate, mapping = aes(x = bath)) +
+  geom_bar()
+```
+
+```{r exercise}
+ggplot(estate, mapping = aes(x = garage)) +
+  geom_bar()
+```
+
+## two variables
+
+```{r}
+# continuous x and y
+ggplot(data = mpg, mapping = aes(x = cty, y = hwy)) +
+  geom_point() # this shows overlapping points; adjust with jitter
+
+ggplot(data = mpg, mapping = aes(x = cty, y = hwy)) +
+  geom_jitter() # adjusted for overlap
+
+ggplot(data = mpg, mapping = aes(x = cty, y = hwy)) +
+  geom_point() +
+  geom_smooth(se = FALSE)
+```
+
+**Exercise**: Using the `estate` data, make a scatterplot of number of bedrooms versus number of bathrooms. Adjust for any overplotting.
+
+```{r exercise}
+ggplot(estate, mapping = aes(x = bed, y = bath)) +
+  geom_jitter()
+```
+
+```{r}
+# discrete X, continuous Y
+ggplot(data = mpg, mapping = aes(x = class, y = hwy)) +
+  geom_boxplot()
+```
+
+-   **Exercise**: Using the `estate` data, plot sales price versus style. (*hint*: you need to first convert `style` to a factor using `as.factor()`)
+
+```{r exercise}
+estate <- estate %>% 
+  mutate(style = as.factor(style))
+```
+
+```{r exercise}
+ggplot(estate, mapping = aes(x = style, y = price)) +
+  geom_boxplot()
+```
+
+## color coding
+
+```{r}
+ggplot(data = mpg, mapping = aes(x = cty, y = hwy, color = drv)) +
+  geom_jitter()
+```
+
+**Exercise**: Using the `estate` data, create a boxplot of price versus ac, color coding by pool
+
+```{r exercise}
+ggplot(estate, mapping = aes(x = ac, y = price, color = pool)) +
+  geom_boxplot()
+```
+
+## changing a legend title
+
+```{r}
+ggplot(data = mpg, mapping = aes(x = cty, y = hwy, color = drv)) +
+  geom_jitter() +
+  scale_color_discrete(name = "New Name1")
+```
+
+```{r}
+ggplot(data = mpg, mapping = aes(x = cty, y = hwy, shape = drv)) +
+  geom_jitter() +
+  scale_shape_discrete(name = "New Name2")
+```
+
+## faceting
+
+You can facet by a categorical variable by adding a `facet_grid()` or `facet_wrap()` function
+
+The variable to the left of the tilde ("`~`") indexes the row facets, the variable to the right of the tilde indexes the column facets. Using a dot ("`.`") in place of a variable means that there will only be one row/column facet.
+
+```{r}
+ggplot(data = mpg, mapping = aes(x = cty, y = hwy)) +
+  geom_point() +
+  facet_grid(. ~ drv)
+```
+
+```{r}
+ggplot(data = mpg, mapping = aes(x = cty, y = hwy)) +
+  geom_point() +
+  facet_grid(drv ~ .)
+```
+
+```{r}
+ggplot(data = mpg, mapping = aes(x = cty, y = hwy)) +
+  geom_point() +
+  facet_grid(fl ~ drv)
+```
+
+**Exercise**: Using the `estate` data, plot price versus area, faceting by ac, color coding by pool
+
+```{r}
+ggplot(estate, mapping = aes(x = price, y = area, color = pool)) +
+  geom_point() +
+  facet_grid(~ ac)
+```
+
+## change theme
+
+```{r}
+ggplot(data = mpg, mapping = aes(x = cty, y = hwy)) +
+  geom_point() + 
+  theme_classic()
+```

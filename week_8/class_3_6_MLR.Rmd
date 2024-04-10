@@ -1,0 +1,353 @@
+---
+title: "class_3_6_mlr"
+author: "lisa liubovich"
+date: "2024-03-06"
+output: pdf_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(tidyverse)
+library(broom)
+```
+
+# Estimation and Inference in R
+
+-   A portrait studio chain contains data on 21 cities (from Section 6.9 of KNNL). Variables include
+
+    -   `young`: The number of persons aged 16 or younger in the community (thousands of persons).
+
+    -   `disp`: The per capita disposable personal income in the community (thousands of dollars).
+
+    -   `sales`: Portrait studio sales in the community (thousands of dollars).
+
+    ```{r}
+    portrait <- tribble(~young, ~disp, ~sales,
+                        68.5,   16.7,  174.4,
+                        45.2,   16.8,  164.4,
+                        91.3,   18.2,  244.2,
+                        47.8,   16.3,  154.6,
+                        46.9,   17.3,  181.6,
+                        66.1,   18.2,  207.5,
+                        49.5,   15.9,  152.8,
+                        52.0,   17.2,  163.2,
+                        48.9,   16.6,  145.4,
+                        38.4,   16.0,  137.2,
+                        87.9,   18.3,  241.9,
+                        72.8,   17.1,  191.1,
+                        88.4,   17.4,  232.0,
+                        42.9,   15.8,  145.3,
+                        52.5,   17.8,  161.1,
+                        85.7,   18.4,  209.7,
+                        41.3,   16.5,  146.4,
+                        51.7,   16.3,  144.0,
+                        89.6,   18.1,  232.6,
+                        82.7,   19.1,  224.1,
+                        52.3,   16.0,  166.5)
+    ```
+
+**You always want to start with explanatory data analysis**
+
+```{r}
+ggplot(portrait, aes(x = young, y = sales)) +
+  geom_point()
+```
+
+this it the **marginal association** --\> association between x and y not adjusting for any other variables
+
+this marginal association looks strong.
+
+```{r}
+ggplot(portrait, aes(x = disp, y = sales)) +
+  geom_point()
+```
+
+more disposable income --\> more willing to spending on stuff
+
+```{r}
+ggplot(portrait, aes(x = disp, y = young)) +
+  geom_point()
+```
+
+looks positive as well
+
+cities with more disposable income tend to have more young people --\> maybe you can afford to have more kids?
+
+Maybe some of the association between disposable income and sales can be explained by the number of young people. This is one possible explanation. Another explanation is that if you have more young people, you have more disposable income, which may result in more sales. We won't be able to determine the causal link in this class, but we can say how much more sales we can expect if there are more young people.
+
+**You can create a pairs plot that makes all possible scatterplots**
+
+```{r}
+install.packages("GGally")
+library(GGally)
+ggpairs(portrait)
+```
+
+ignore the starts --\> they assume the data is perfectly normally distributed
+
+now we see all 3 scatterplots at once instead of using ggplot 3 times or using base r pairs (which is ugly)
+
+**Marginal plots tell you nothing about whether a linear relationship is appropriate/about the assumptions of the MLR model, but it they can hint at what transformations may be appriopriate.**
+
+**To fit a MLR model of sales on young and disp, we can use `lm()`:**
+
+```{r}
+lm_portrait <- lm(sales ~ young + disp, data = portrait)
+tidy(lm_portrait, conf.int = TRUE)
+```
+
+In this model: Yi=β0+β1X1i+β2X2i+ϵi, Yi is sales, X1i is young and X2i is disp
+
+Fitted regression surface: y = -68.857 + 1.455X1 + 9.366X2
+
+HOW TO DO BETA HAT IN R: (escape math mode with backslashes)
+
+$\hat\beta$
+
+Let's interpret these coefficient estimates:
+
+1.455 -\> cities that have 1000 more young people but the same amount of per capita disposable income have \$1455 more sales on average (95% CI of \\\$1009 to \\\$1899)
+
+AKA
+
+cities that have 1000 more young people /\$1455 more sales on average, (95% CI of \\\$1009 to \\\$1899) adjusting for disposable income.
+
+9.366 --\> cities with \\\$1000 more in per capita disposable income, but the same number of young people, have \\\$9366 in more sales on average.(95% of \\\$827 to \$\\17904)
+
+AKA
+
+cities with \\\$1000 more in per capita disposable income have \\\$9366 in more sales on average (95% CI \\\$827 to \\\$17904), adjusting for the number of young people.
+
+**Exercise**: Let Yi be the sales for community i Xi1 be the number of young individuals in community i, and Xi2 be the amount of disposable income for individual i. Write out the two models that the p-value `0.002e-06` is testing. Write out the two models that the p-value `3.332e-02` is testing.
+
+For the p-value = 0.002e-06
+
+H0: Yi = B0 + B2Xi2 + Ei --\> corresponds to H0 : B1 = 0
+
+HA: Yi = B0 + B1Xi1 + B2Xi2 + Ei -\> corresponds to HA: B =/= 0
+
+for the p-value = 3.332e-02
+
+H0: Yi = B0 + B1Xi1 + Ei --\> corresponds to H0 : B2 = 0
+
+HA: Yi = B0 + B1Xi1 + B2Xi2 + Ei -\> corresponds to HA: B =/= 0
+
+Let's compare the MLR coefficient estimates to the SLR coefficient estimates
+
+```{r}
+lm_disp <- lm(sales ~ disp, data = portrait) # SLR of sales on disposable income
+tidy(lm_disp)
+```
+
+```{r}
+tidy(lm_portrait) # estimates of the MLR
+```
+
+cities that have \\\$1000 more per capita disposable income have \\\$31170 more sales on average
+
+Cities that have \\\$1000 more per capita disposable income, but the same number of young people, have \\\$9366 more sales on average.
+
+# Estimating mean responses and making predictions.
+
+```{r}
+augment(lm_portrait)
+```
+
+If we have a new set of predictors, then we need to first create the data frame representing Xh�ℎ before using `predict()` to obtain estimated mean values.
+
+```{r}
+newdf <- data.frame(young = c(60, 55), disp = c(15, 15.5))
+predict(object = lm_portrait, newdata = newdf)
+```
+
+In R, you just tell `predict()` that you want confidence intervals.
+
+```{r}
+predict(object = lm_portrait, newdata = newdf, interval = "confidence")
+```
+
+In R, you just use the `interval = "prediction"` argument.
+
+```{r}
+predict(object = lm_portrait, newdata = newdf, interval = "prediction")
+```
+
+-   Recall, *prediction intervals depend strongly on the normality assumption*.
+
+-   Be careful about hidden extrapolations in multiple linear regression. Looking at marginal ranges is not enough.
+
+-   In the below plot, the red dot is in the range of x1�1 = `young` and in the range of x2�2 = `disp`, but is not in the range of the joint distribution of `young` and `disp`.
+
+<!-- -->
+
+-   Look how different the coefficient for `disp` is when we include `young` versus when we do not include `young`.
+
+-   **You should generally expect the coefficient estimates of the same variable to differ as you include more covariates in your model.**
+
+-   Whenever you include more covariates in a model, the interpretation of the coefficient *on the same variable* changes.
+
+-   What is the interpretation of the 31.17 coefficient?
+
+    > Communities that have a per-capita disposable income that is \$1000 more have \$31,000 more sales on average.
+
+-   What is the interpretation of the 9.366 coefficient?
+
+    > Communities that have a per-capita disposable income that is \$1000 more, but the same number of young people, have \$9400 more sales on average.
+
+    > Or, adjusting for the number of young people in a community, communities that have \$1000 more in per capita income have \$9400 more sales on average.
+
+    -   These are equivalent interpretations. I like the first description better, but when you are publishing a paper you should use the second description.
+
+# Diagnostics
+
+Obtain residuals in MLR using the same code as in SLR:
+
+```{r}
+aport <- augment(x = lm_portrait)
+ggplot(data = aport, mapping = aes(x = .fitted, y = .resid)) +
+  geom_point() +
+  geom_hline(yintercept = 0)
+```
+
+```{r}
+ggplot(data = aport, mapping = aes(x = young, y = .resid)) +
+  geom_point() +
+  geom_hline(yintercept = 0)
+```
+
+```{r}
+ggplot(data = aport, mapping = aes(x = disp, y = .resid)) +
+  geom_point() +
+  geom_hline(yintercept = 0)
+```
+
+Everything looks good for our portrait example. Even the QQ-plot looks good.
+
+```{r}
+ggplot(data = aport, mapping = aes(sample = .resid)) +
+  geom_qq() +
+  geom_qq_line()
+```
+
+## Exercise:
+
+1.  Fit a linear model of price on area and lot size.
+
+2.  Make residual plots and from these alone, try to deduce any possible issues.
+
+3.  Try to fix the issues from part 2. Iterate making residual plots and fixing issues until you have a final model.
+
+4.  Write down your final model
+
+5.  Obtain coefficient estimates and interpret them on the original scale of all variables.
+
+6.  A new house is on sale. It has an area of 1000 square feet and a lot-size of 10,000. The realter wants you to give them a range of possible selling prices.
+
+### 1.
+
+```{r}
+est <- read_csv("../week_8/estate.csv")
+est
+```
+
+```{r 1}
+lm_est <- lm(price ~ area + lot, data = est)
+lm_est
+```
+
+### 2.
+
+```{r 2}
+aest <- augment(lm_est)
+ggplot(aest, aes(x = .fitted, y = .resid)) +
+  geom_point() +
+  geom_hline(yintercept = 0)
+```
+
+funnel shape --\> unequal variance
+
+```{r}
+ggplot(aest, aes(x = area, y = .resid)) +
+  geom_point() +
+  geom_hline(yintercept = 0)
+```
+
+funnel shape --\> unequal variance
+
+```{r}
+ggplot(aest, aes(x = lot, y = .resid)) +
+  geom_point() +
+  geom_hline(yintercept = 0)
+```
+
+funnel shape --\> unequal variance
+
+### 3.
+
+solution: log y and x to fix the variance and the curve
+
+```{r 3}
+logest <- mutate(log_price = log(price), log_area = log(area), log_lot = log(lot), est)
+lm_logest <- lm(log_price ~ log_area + log_lot, logest)
+alogest <- augment(lm_logest)
+ggplot(alogest, aes(x = .fitted, y = .resid)) +
+  geom_point() +
+  geom_hline(yintercept = 0) +
+  geom_smooth(method = "loess")
+```
+
+```{r 3}
+ggplot(alogest, aes(x = log_area, y = .resid)) +
+  geom_point() +
+  geom_hline(yintercept = 0)
+```
+
+```{r 3}
+ggplot(alogest, aes(x = log_lot, y = .resid)) +
+  geom_point() +
+  geom_hline(yintercept = 0)
+```
+
+### 4.
+
+log(yi) = B0 + B1log(Xi1) + B2log(Xi2) + Ei --\> yi = e^B0^ Xi1^B1^ Xi2^B2^
+
+where yi = price, Xi1 = area, and Xi2 = lot size
+
+### 5.
+
+```{r 5}
+tidy(lm_logest, conf.int = TRUE)
+```
+
+B0 = 1.9636
+
+B1 = 1.2198
+
+B2 = 0.1103
+
+Houses with twice the area but the same lot size cost (2.33 times as much) 2^1.2198^ as much on average. Houses with twice the lot size but the same area cost 2^0.1103^ -1 (8% more) on average
+
+```{r}
+2^1.2198
+2^0.1103
+```
+
+### 6.
+
+Yi = e^1.964^ 1000^1.220^ 10000^0.110^
+
+Remember to check for normality!
+
+```{r}
+newdf <- data.frame(log_area = log(1000), log_lot = log(10000))
+predict(object = lm_logest, newdata = newdf , interval = "prediction")
+```
+
+```{r}
+exp(11.40567)
+exp(10.86621)
+exp(11.84513)
+```
+
+Predicted sale price: \\\$89,829.62 (95% prediction interval of \\\$52,376.33 to \\\$138,403.80

@@ -1,0 +1,236 @@
+---
+title: "Anova"
+author: "David Gerard"
+date: "`r Sys.Date()`"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r}
+library(tidyverse)
+library(broom)
+body <- read_csv("https://dcgerard.github.io/stat_415_615/data/body.csv")
+glimpse(body)
+```
+
+
+```{r,message=FALSE}
+library(GGally)
+ggpairs(body)
+```
+
+
+```{r}
+lm_all <- lm(fat ~ triceps + thigh + midarm, data = body)
+```
+
+You can get extra sums of squares by `anova()`.
+```{r}
+anova(lm_all)
+```
+
+SSR(X1) = 352
+SSR(X2|X1) = 33
+SSR(X3|X1, X2) = 12
+SSE(X1, X2, X3) = 98
+
+SSTO = 352 + 33 + 12 + 98
+SSR(X1, X2) = 352 + 33
+SSE(X1) = 33 + 12 + 98
+
+The above way of displaying the ANOVA table is called a Type I ANOVA table.
+
+
+Order matters
+```{r}
+lm_all_2 <- lm(fat ~ thigh + midarm + triceps, data = body)
+anova(lm_all_2)
+```
+
+This is a different anova decomposition.
+SSR(X2) = 382
+SSR(X3|X2) = 2
+SSR(X1|X2, X3) = 13
+SSE(X1, X2, X3) = 98
+
+A Type II ANOVA table only shows you the extra sums of squares of a variable given all others.
+
+```{r}
+library(car)
+Anova(lm_all)
+```
+
+SSR(X1|X2, X3) = 12.7
+SSR(X2|X1, X3) = 7.5
+SSR(X3|X1, X2) = 11.5
+SSE(X1, X2, X3) = 98.4
+
+
+
+# Overall F-test
+
+Use `glance()` from the broom package.
+```{r}
+glance(lm_all)
+```
+
+F-statistic = 21.52
+df_extra = 3
+p-value = 7.343e-06 = 0.000007343
+
+We have strong evidence that at least one of triceps, thigh, and midarm are associated with body fat (p-value of 0.000007343)
+
+## Single variable inclusion
+
+You can use `Anova()` to get the single variable inclusion p-values for all variables.
+
+```{r}
+Anova(lm_all)
+```
+
+SSE(X1|X2, X3) = SSE(X2, X2) - SSE(X1, X2, X3) = 12.7
+SSE(R) = SSE(X2, X3)
+SSE(F) = SSE(X1, X2, X3)
+F-statistic = (SSE(R) - SSE(F)) / (dfr - dff) / (SSE(F) / dff)
+            = SSR(X1|X2, X3) / df_extra / (SSE(X1, X2, X3) / dff)
+            = (12.7 / 1) / (98.4 / 16)
+pf(2.07, 1, 16, lower.tail = FALSE)
+
+F-statistics = (extra sums of squares / extra degrees of freedom) / (SSE(F) / df_f)
+
+
+```{r}
+tidy(lm_all)
+```
+
+F-test and t-methods provide same p-values for single variable inclusion.
+
+
+## Multiple variable inclusion
+
+Fit both models in R, then plug them into `anova()`.
+
+```{r}
+lm_reduced <- lm(fat ~ midarm, data = body)
+lm_full <- lm(fat ~ triceps + thigh + midarm, data = body)
+anova(lm_reduced, lm_full)
+```
+
+df_reduced = 18
+df_full = 16
+df_extra = 2
+SSE(R) = 485
+SSE(F) = 98
+SSE(R) - SSE(F) = SSR(X1, X2 | X3) = 387
+F-statistic = 31.5
+p-value = 2.9e-06
+
+
+# Categorical variable inclusion
+
+```{r}
+earnings <- read_csv("https://dcgerard.github.io/stat_415_615/data/earnings.csv")
+earnings <- mutate(earnings, log_earn = log(earn))
+earnings <- select(earnings, log_earn, ethnicity, height)
+earnings <- filter(earnings, is.finite(log_earn))
+glimpse(earnings)
+```
+
+
+
+If you include a categorical variable in lm() in R, it will automatically choose the indicator variables for you.
+
+```{r}
+lm_earn <- lm(log_earn ~ ethnicity + height, data = earnings)
+tidy(lm_earn)
+```
+
+To test if ethnicity is associated with earnings, adjusting for height, use `Anova()`.
+
+```{r}
+Anova(lm_earn)
+```
+
+We have evidence of an association between ethnicity and earnings adjusting for height (p=0.011).
+
+You can change the base class by converting it to a factor and using `fct_relevel()` from the forcats package (a part of the tidyverse).
+
+```{r}
+earnings <- mutate(earnings, ethnicity = factor(ethnicity))
+earnings <- mutate(earnings, ethnicity = fct_relevel(ethnicity, "Hispanic")) ## move Hispanic up to the first level to be the base class
+lm_earn <- lm(log_earn ~ ethnicity + height, data = earnings)
+tidy(lm_earn)
+```
+
+# F-test Lack of Fit
+
+
+```{r}
+textile <- read_csv("https://dcgerard.github.io/stat_415_615/data/textile.csv")
+glimpse(textile)
+```
+
+Let's see how many replicates there are
+```{r}
+textile |>
+  group_by(length, count) |>
+  summarize(n = n())
+```
+
+
+To run an F-test LOF, first fit the full and the reduced models, then run `anova()`.
+
+```{r}
+lm_reduced <- lm(strength ~ length + count, data = textile)
+
+textile <- mutate(textile,
+                  length_fac = factor(length),
+                  count_fac = factor(count))
+lm_full <- lm(strength ~ length_fac * count_fac, data = textile)
+
+anova(lm_reduced, lm_full)
+```
+
+Strong evidence of a LOF.
+
+Notes:
+- Typically, you only run an F-test LOF in experimental designs.
+
+
+
+# Partial coefficients of determination
+
+```{r}
+anova(lm_all)
+```
+
+- Proportion of variability in Y explained by X1
+$R^2_{Y1}$ = 352 / (352 + 33 + 12 + 98)
+0.71
+
+- Proportion of variability not explained by X1 that is explained by X2:
+$R^2_{Y2|1}$ = 33 / (33 + 12 + 98)
+0.23
+
+- Proportion of varability not explained by X1 and X2 that is explained by X3:
+$R^2_{Y3|12}$ = 12 / (12 + 98)
+0.11
+
+- Proportion of variability explained by X1, X2, X3
+$R^2$ = (352 + 33 + 12) / 98
+
+71% of the variation in Y can be explained by X1. Including X2 results in an additional 23% reduction. Including X3 only results in a 11% reduction.
+
+
+
+
+
+
+
+
+
+
+

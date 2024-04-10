@@ -1,0 +1,134 @@
+---
+title: "hw_8"
+author: "lisa liubovich"
+date: "2024-03-28"
+output: pdf_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r installing packages}
+library(tidyverse)
+library(broom)
+library(car)
+```
+
+# 1.
+
+```{r loading data}
+brand <- read_csv("https://dcgerard.github.io/stat_415_615/data/brand.csv")
+brand
+```
+
+```{r 1}
+lmbrand <- lm(like ~ moisture + sweetness, data = brand)
+Anova(lmbrand)
+```
+
+# 2.
+
+For moisture:
+
+Reduced model: $Y_{i}$ = $\beta_0$ + $\beta_2$ $X_{i2}$ + $\varepsilon_{i}$ (including just sweetness as a predictor)
+
+Full Model: $Y_{i}$ = $\beta_0$ + $\beta_1$ $X_{i1}$ + $\beta_2$ $X_{i2}$ + $\varepsilon_{i}$ (including both moisture and sweetness as predictors)
+
+H0: $\beta_1$ = 0 (there is no relationship between like and moisture given sweetness)
+
+HA: $\beta_1$ $\neq$ 0 (there is a relationship between like and moisture given sweetness)
+
+For sweetness:
+
+Reduced model: $Y_{i}$ = $\beta_0$ + $\beta_1$ $X_{i1}$ + $\varepsilon_{i}$ (including just moisture as a predictor)
+
+Full model: $Y_{i}$ = $\beta_0$ + $\beta_1$ $X_{i1}$ + $\beta_2$ $X_{i2}$ + $\varepsilon_{i}$ (including both moisture and sweetness as predictors)
+
+H0: $\beta_2$ = 0 (there is no relationship between like and sweetness given moisture)
+
+HA: $\beta_2$ $\neq$ 0 (there is a relationship between like and sweetness given moisture)
+
+# 3.
+
+SSR($X_{1}$\|$X_{2}$) = SSE($X_2$) - SSE($X_1$, $X_2$) = (1566.45 + 94.30) - (94.30) = 1566.45
+
+SSR($X_2$\|$X_1$) = SSE($X_1$) - SSE($X_1$, $X_2$) = (306.25 + 94.30) - (94.30) = 306.25
+
+SSE($X_1$, $X_2$) = 94.30
+
+# 4.
+
+F\* = ((SSE(R) - SSE(F)) / (dfr - dff)) / (SSE(F)/dff)
+
+Where:
+
+SSE(R) = SSE($X_2$) = 1566.45 + 94.30 = 1660.75
+
+SSE(F) = SSE($X_1$, $X_2$) = 94.30
+
+$df_r$ = n - q = 16 - 2 = 14
+
+$df_f$ = n - p = 16 -3 =13
+
+F\* = ((1660.75 - 94.30) / (14 - 13)) / (94.30 / 13)
+
+= (1566.45 / 1) / (94.30 / 13)
+
+= 1566.45 / 7.353846
+
+= 215.9475
+
+```{r 4}
+94.30/13
+1566.45 / 7.253846
+```
+
+# 5.
+
+In order to see if we can run it a lack-of-fit test for the data, we need to check if there are repeat observations at the same level of a predictor.
+
+```{r 5 checking for repeat obs}
+brand %>% 
+  group_by(moisture, sweetness) %>% 
+  count()
+```
+
+There are repeat observations, so we can run an F-test LOF.
+
+```{r 5 f-test LOF}
+lm_reduced <- lm(like ~ moisture + sweetness, data = brand)
+brand1 <- mutate(brand,
+                 moist_fac = factor(moisture),
+                 sweet_fac = factor(sweetness))
+lm_full <- lm(like ~ moist_fac * sweet_fac, data = brand1)
+anova(lm_reduced, lm_full)
+```
+
+p-value is large --\> we do not have evidence to suggest a lack of fit (p-value = 0.453)
+
+# 6.
+
+```{r}
+glance(lmbrand)
+```
+
+H0: $\beta_1$ = $\beta_2$ = ... = $\beta_{p-1}$ = 0 (none of the predictors are associated with like)
+
+HA: at least one $\beta$ is non-zero (at least one of the predictors is associated with like)
+
+F-statistic: 129.0832
+
+df extra: 2
+
+p-value: 2.658261e-09
+
+We have evidence to suggest that at least one of moisture and sweetness are associated with like.
+
+# 7.
+
+The overall F-test assesses the overall significance of the regression model by evaluating whether there is a significant linear relationship between the predictors and response variable as a whole. That is, the overall F-test tests whether at least one of the predictors in the model is associated with the response variable. The lack-of-fit test assesses whether the regression model adequately fits the observed data by evaluating whether the model adequately captures the functional form of the relationship between the predictors and the response variable. That is, the lack-of-fit test focuses on assessing whether the model adequately captures the variability in the data that is not explained by the model.
+
+Assistance from ChatGPT:
+
+<https://chat.openai.com/c/d1a5222f-6403-4f12-b79f-3d0b9d83b927>

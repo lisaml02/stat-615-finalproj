@@ -1,0 +1,158 @@
+---
+title: "class_1_31_SLR"
+author: "lisa liubovich"
+date: "2024-01-31"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r}
+library(tidyverse)
+```
+
+# Finding OLS Estimates
+
+```{r}
+hibbs <- read_csv("../week_3/hibbs.csv")
+View(hibbs)
+```
+
+-   Use `lm()` (for "linear model") to obtain coefficient estimates.
+
+-   The first argument of `lm()` is a *formula* of the form `response ~ predictor`. That squiggly line (`~`) separating the response from the predictor is called a "tilde".
+
+    -   y variable is to the left of the tilde
+
+    -   x variable is to the right of the tilde
+
+-   The second argument is the data frame that holds the variables.
+
+-   Using the Hibbs data
+
+```{r}
+lm_hibbs <- lm(vote ~ growth, data = hibbs)
+lm_hibbs
+
+```
+
+-   Where 46.248 is B0\^, 3.061 is B1\^
+
+-   We will never truly know what B0 and B1 are
+
+<!-- -->
+
+-   Estimated regression line: y = 46.248 + 3.061x
+
+-   We'll use the broom package to interfance with the lm object
+
+    ```{r}
+    library(broom)
+    ```
+
+-   It is a pain to extract these values using base R, but the `{broom}` package has a nice function called `tidy()` that returns coefficient estimates in a data frame.
+
+    -   broom has three functions that are useful:
+
+        -   `glance()`: provides a 1 row summary of the model fit
+
+        -   `tidy()`: provides one row per parameter
+
+        -   `augment()`: provides one row per observational unit
+
+-   to get OLS estimates (and other values corresponding to those) use tidy
+
+    ```{r}
+    tidy(lm_hibbs)
+    ```
+
+## Exercise
+
+**Exercise**: From the `mtcars` data, find the OLS estimates of `mpg` (the response) on `wt` (the predictor). Interpret the coefficients. You can load these data into R using:
+
+```{r}
+data(mtcars)
+```
+
+```{r}
+lm_cars <- lm(mpg ~ wt, data = mtcars)
+tidy(lm_cars)
+```
+
+prediction: y = 37.285 - 5.344x
+
+37.285 is the estimated y-intercept
+
+Cars that weigh 1000 more pounds have 5.344 worse mpg on average.
+
+# Estimating Mean Response & Residuals
+
+-   you can obtain the fits (fitted values) and residuals using `augment()`
+
+    ```{r}
+    a_hibbs <- augment(lm_hibbs)
+    a_hibbs$.fitted
+    a_hibbs$.resid
+
+    ```
+
+-   sometimes you want to make an interpolation. To do so, you first create a data frame with the x-values with which you want to make that prediction
+
+    ```{r}
+    newdf <- data.frame(growth = c(1,2,3.3))
+    ```
+
+-   you use the `predict()` function, feeding in both the lm object and the new data frame
+
+    ```{r}
+    predict(object = lm_hibbs, newdata = newdf)
+    ```
+
+-   49 is the predicted vote share when growth is 1%
+
+-   52 is the predicted vote share when growth is 2%
+
+-   56 is the predicted vote share when growth is 3.3%
+
+## Exercise
+
+what is the average mpg of a car that weights 1000 lbs, 2000 lbs, and 3000 lbs?
+
+```{r}
+cars_df <- data.frame(wt = c(1,2,3))
+predict(object = lm_cars, newdata = cars_df)
+```
+
+-   For 1000 lbs: 31.94 mpg
+
+-   for 2000 lbs: 26.60 mpg
+
+-   for 3000 lbs: 21.25 mpg
+
+But wait! Is 1000 lbs in range for a prediction?
+
+```{r}
+range(mtcars$wt)
+```
+
+It is, but its very low. If we look at the graph below, it wouldn't be appropriate to predict an mpg so far on the bottom left corner.
+
+```{r}
+ggplot(mtcars, aes(x = wt, y = mpg)) +
+  geom_point()
+```
+
+-   it would be an extrapolation to make a prediction at a wt of 1000 cars --\> **I refuse to predict what the mpg of a 1000 car would be**
+
+    ```{r}
+    newdf <- data.frame(wt= c(2,3))
+    predict(lm_cars, newdata = newdf)
+    ```
+
+-   cars that weigh 2000 lbs have 26.60 mpg on average
+
+-   cars that weigh 1000 lbs have 21.25 mpg on average
+
+We will often be asked to predict an extrapolation, and we need to **refuse**.

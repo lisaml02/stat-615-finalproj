@@ -1,0 +1,270 @@
+---
+title: "class_2_21"
+author: "lisa liubovich"
+date: "2024-02-21"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r}
+library(tidyverse)
+library(broom)
+library(ggplot2)
+```
+
+# F-test for lack-of-fit
+
+first let's plot our data:
+
+```{r}
+bank <- tibble::tribble(~gift, ~accounts,
+                        125, 160,
+                        100, 112,
+                        200, 124,
+                         75,  28,
+                        150, 152,
+                        175, 156,
+                         75,  42,
+                        175, 124,
+                        125, 150,
+                        200, 104,
+                        100, 136
+                        )
+```
+
+```{r}
+ggplot(bank, aes(x = gift, y = accounts)) +
+  geom_point() +
+  geom_smooth(method = "lm", se = FALSE)
+```
+
+## Lack-of-fit Test in R
+
+First, fit both the reduced and full models.
+
+The reduced model we've seen before.
+
+```{r}
+lm_r <- lm(accounts ~ gift, data = bank)
+```
+
+Then fit the full model by
+
+1.  converting the x variable to a factor variable
+2.  use lm like you would before
+
+```{r}
+df_full <- mutate(bank, gift_factor = as.factor(gift))
+lm_f <- lm(accounts ~ gift_factor, data = df_full)
+```
+
+Then use `anova()` to compare the two models
+
+```{r}
+anova(lm_r, lm_f)
+```
+
+The p-value (0.005594) provides strong evidence of a lack of fit of the linear model.
+
+Last comments:
+
+-   you need replicates to do an F-test LOF
+
+-   small p-values indicate evidence of a LOF
+
+-   large p-values indicate no evidence of a LOF
+
+-   typically, F-tests LOF are only run in experimental designs
+
+-   basically assessing the linearity assumption of the SLR
+
+# Back Transforming
+
+```{r}
+data("mtcars")
+ggplot(data = mtcars, mapping = aes(x = log(wt), y = mpg)) +
+  geom_point()
+```
+
+constant variance with a little curvature --\> let's try logging x
+
+## Logging X but not logging Y
+
+```{r}
+mtcars <- mutate(mtcars, log_wt = log(wt)) # transform x
+lm_mt <- lm(mpg ~ log_wt, data = mtcars) # fit the model
+tidy(lm_mt, conf.int = TRUE)
+```
+
+if c =2
+
+```{r}
+-17.09 * log(2)
+```
+
+for our transformed confidence interval:
+
+```{r}
+-20.17 * log(2)
+-14.00 * log(2)
+```
+
+Interpretation: cars that weigh twice as much have 11.85 worse mpg on average (95% CI of 9.7 to 14 mpg worse)
+
+How much worse mpg would be a car that weighs 50% more?
+
+```{r}
+-17.09 * log(1.5)
+-20.17 * log(1.5)
+-14.00 * log(1.5)
+```
+
+Cars that weigh 50% have more 6.9 worse MPG (95% CI of 5.7 to 8.2 worse mpg)
+
+Suppose we want to make a prediction for a car that weights 3000 lbs. First we create a data frame with the logged x variable.
+
+```{r}
+newdf <- data.frame(log_wt = log(3))
+predict(lm_mt, newdata = newdf, interval = "prediction")
+```
+
+Prediction interval: We predict that a car that weighs 3000 lbs would have an mpg of 20.5 (of 14.95 to 26.02 mpg)
+
+## Not logging X but logging Y
+
+The early growth of [COVID-19 in DC](https://dcgerard.github.io/stat_415_615/data.html#dc-covid-tests) looked exponential:
+
+```{r}
+dc <- read_csv("https://dcgerard.github.io/stat_415_615/data/dccovid.csv")
+dc <- select(dc, day, positives)
+dc <- filter(dc, day <= "2020-04-01", day >= "2020-03-11") 
+ggplot(data = dc, mapping = aes(x = day, y = log(positives))) +
+  geom_point()
+```
+
+First, log the response variable. Then fit the linear model.
+
+```{r}
+dc <- mutate(dc, log_positives = log(positives), day_num = as.numeric(day - day[[1]]))
+lm_cov <- lm(log_positives ~ day_num, data = dc)
+tidy(lm_cov, conf.int = TRUE)
+```
+
+```{r}
+exp(0.218) - 1
+```
+
+each day, there were 24.26% more COVID cases, on average
+
+```{r}
+exp(0.2049) -1
+exp(0.2311) -1
+```
+
+each day, there were 24.26% more COVID cases, on average (95% CI of 22.74% to 26.00% more).
+
+**Exercise**: How many more COVID cases did we see every two days? Provide a 95% confidence interval with your estimate.
+
+c = 2
+
+```{r}
+exp(2 * 0.218) -1
+exp(2 * 0.2049) -1
+exp(2* 0.2311) -1
+```
+
+Every two days, there were 54.65% more covid cases on average (95% CI of 50.65% to 58.76% more) on average
+
+What about every 10 days? (c =10)
+
+```{r}
+exp(10 * 0.218)
+exp(10 * 0.2049)
+exp(10* 0.2311)
+```
+
+Every 10 days, there were 8.846 times as many COVID cases (95% CI of 7.76 times more to 10.08 times more) on average.
+
+What if we want a prediction for how many covid cases there were on day 10?
+
+```{r}
+newdf <- data.frame(day_num = 10)
+predict(object = lm_cov, newdata = newdf, interval = "prediction")
+```
+
+If you make predictions with log-y, make sure you exponentiate to get back to the original scale
+
+```{r}
+exp(4.26424)
+exp(3.965443)
+exp(4.763037)
+```
+
+We predict that there were 78.59 COVID cases on day 10 (95% prediction interval of 52.74 to 117.10 COVID cases)
+
+## Logging X and logging Y
+
+Wine and mortality follow a power-law decline
+
+```{r}
+library(Sleuth3)
+data("ex0823")
+wine <- ex0823
+ggplot(data = wine, mapping = aes(x = log(Wine), y = log(Mortality))) +
+  geom_point()
+```
+
+fit linear model
+
+```{r}
+wine <- mutate(wine, log_wine = log(Wine),
+               log_mort = log(Mortality))
+lm_wine <- lm(log_mort ~ log_wine, data = wine)
+tidy(lm_wine, conf.int = TRUE)
+```
+
+```{r}
+2^-0.3556 - 1 # subtract one to get difference
+```
+
+```{r}
+2^-0.4678 -1
+2^-0.2434 -1
+```
+
+Countries that drink twice as much wine have mortality rates that are 21.85% lower on average (95% CI of 15.52% lower to 27.69% lower)
+
+What about countries that drink 10% more? c = 1.1
+
+```{r}
+1.1^-0.3556 - 1
+1.1^-0.4678 - 1
+1.1^-0.2434 -1
+```
+
+We predict that countries that drink 10% more have a mortality rate that is 3.33% lower on average (95% CI of 2.29% lower to 4.36% lower)
+
+```{r}
+range(wine$Wine)
+```
+
+Range is from 2.8 liters per year to 75.9 liters per year
+
+We want a predicted mortality rate for a country that drinks 30 liters of wine per year
+
+```{r}
+newdf <- data.frame(Wine = 20)
+newdf <- mutate(newdf, log_wine = log(Wine))
+predict(object = lm_wine, newdata = newdf, interval = "prediction")
+```
+
+We need to exponentiate the values to get back into the original scale:
+
+So countries that drink 20 liters per person per year have on average mortality rates of about exp⁡(1.49)=4.4 deaths per 1000 individuals. With a prediction interval of exp⁡(0.984)=2.7 to exp⁡(1.997)=7.4 deaths per 1000 individual.
+
+Note: on smoothers, don't overestimate the smoothers
+
+# 
