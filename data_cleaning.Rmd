@@ -1,0 +1,80 @@
+---
+title: "final_project_EDA"
+author: "lisa liubovich"
+date: "2024-04-14"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r loading packages}
+library(tidyverse)
+library(broom)
+library(GGally)
+```
+
+```{r loading data}
+niger <- read_csv("./NigerData.csv")
+glimpse(niger)
+```
+
+```{r cleaning data}
+niger %>% 
+  select(age, any_edu, fac_delivery, wealth, q910, q501, q503, q505a, q506b, q507, q508, q901, q902, q903a, q903b, q904a, q904b, q905, q906, q802, q804, q805, q808, q410, q208) %>% 
+  filter(q508 == 1 | q508 == 3 | q508 == 4) %>% 
+  rename(nutrition = q910,
+         know_1 = q501,
+         know_2 = q901,
+         know_3 = q902,
+         att_1 = q505a,
+         att_2 = q903b,
+         att_3 = q903a,
+         se_1 = q506b,
+         se_2 = q904a,
+         se_3 = q904b,
+         pn_1 = q503,
+         pn_2 = q905,
+         pn_3 = q906)
+```
+
+Key:
+
+-   age: percentage of MWRA who reported their current age and grouped
+
+-   any_edu: percentage of MWRA who reported to have ever gone to school
+
+-   fac_delivery: percentage of MWRA who have given birth in the years preceding the survey who delivered in a facility for their last birth
+
+-   wealth: percentage of MWRA who reported household assets constructed in wealth terciles
+
+-   nutrition: percentage of MWRA who spoke with 1) husband/partner, 2) family member, 3) health provider, 4) nobody about child's nutrition
+
+-   know_1: knowledge gateway 1; percentage of MRWA who state it is healthy for a woman to give only breast milk for the first 6 months
+
+-   know_2: knowledge gateway 2; percentage of MWRA who reported a child 6-23 months should eat 4 or more meals each day
+
+-   know 3: knowledge gateway 3; percentage of MWRA who reported that the number of different types of food a child 6-23 months should eat a day is 4 or more
+
+-   att_1: attitude gateway 1; percentage of MWRA who agree if a baby is exclusively breastfed for 6 months, he/she is less likely to be sick
+
+-   att_2: attitude gateway 2; percentage of MWRA who agree providing meals 4 times a day ensures them to have adequate strength
+
+-   att_3: attitude gateway 3; percentage of MWRA who agree children who eat a variety of foods are less likely to get sick
+
+-   se_1: self-efficacy gateway 1; percentage of MWRA who agree giving only breast milk to the baby for the first 6 months is not difficult at all
+
+-   se_2: self-efficacy gateway 2; percentage of MRWA who agree giving a child a meal 4 times a day is not difficult at all
+
+-   se_3: self-efficacy gateway 3; percentage of MRWA who say giving a child a minimum of 4 or more different types of food a day is not difficult at all
+
+-   pn_1 : perceived norms gateway 1; percentage of MRWA who agree people in the community think it is healthy for a woman to give her baby only breast milk for the first 6 months
+
+-   pn_2: perceived norms gateway 2; percentage of MRWA who believes the number of meals people in community think a child 6-23 months should eat each day is 4 or more
+
+-   pn_3: perceived norms gateway 3; percentage of MRWA who believes number of different types of food people in the community think a child 6-23 months should eat a day is 4 or more
+
+-   exposure to nutrition messages gateway; percentage of MWRA who had heard or seen a message related to breastfeeding or young child nutrition from the radio, health worker, or community event in the past 3 months (combo of 507 and 508?)
+
+-   
