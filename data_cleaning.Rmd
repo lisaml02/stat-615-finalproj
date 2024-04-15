@@ -21,9 +21,8 @@ glimpse(niger)
 ```
 
 ```{r cleaning data}
-niger %>% 
-  select(age, any_edu, fac_delivery, wealth, q910, q501, q503, q505a, q506b, q507, q508, q901, q902, q903a, q903b, q904a, q904b, q905, q906, q802, q804, q805, q808, q410, q208) %>% 
-  filter(q508 == 1 | q508 == 3 | q508 == 4) %>% 
+niger <- niger %>% 
+  select(age, any_edu, fac_delivery, wealth, q910, q501, q503, q505a, q506b, q507, q901, q902, q903a, q903b, q904a, q904b, q905, q906, q802, q804, q805, q808, q412mois_m, q412annee_m, q208) %>% 
   rename(nutrition = q910,
          know_1 = q501,
          know_2 = q901,
@@ -36,45 +35,280 @@ niger %>%
          se_3 = q904b,
          pn_1 = q503,
          pn_2 = q905,
-         pn_3 = q906)
+         pn_3 = q906,
+         exp = q507,
+         parity = q208,
+         antenatal_m = q412mois_m,
+         antenatal_y = q412annee_m,
+         dec_1 = q802,
+         dec_2 = q804,
+         dec_3 = q805,
+         wg = q808)
+
+niger
 ```
 
 Key:
 
 -   age: percentage of MWRA who reported their current age and grouped
 
+    -   factor with 3 levels:
+
+    -   15 to 24 years
+
+    -   25 to 34 years
+
+    -   35 to 49 years
+
 -   any_edu: percentage of MWRA who reported to have ever gone to school
+
+    -   binary variable
+
+    -   0 - no, 1 - yes
 
 -   fac_delivery: percentage of MWRA who have given birth in the years preceding the survey who delivered in a facility for their last birth
 
+    -   
+
 -   wealth: percentage of MWRA who reported household assets constructed in wealth terciles
+
+    -   1 = poorest tercile
+
+    -   2 = middle
+
+    -   3 = richest
 
 -   nutrition: percentage of MWRA who spoke with 1) husband/partner, 2) family member, 3) health provider, 4) nobody about child's nutrition
 
 -   know_1: knowledge gateway 1; percentage of MRWA who state it is healthy for a woman to give only breast milk for the first 6 months
 
+    -   binary variable
+
+    -   1 = those who agree it is healthy for a woman to give a child only breastmilk for the first 6 months, 0 otherwise
+
 -   know_2: knowledge gateway 2; percentage of MWRA who reported a child 6-23 months should eat 4 or more meals each day
+
+    -   binary variable
+
+    -   1 = those who agree a child 6-23 months should receive 4 or meals a day, 0 otherwise
 
 -   know 3: knowledge gateway 3; percentage of MWRA who reported that the number of different types of food a child 6-23 months should eat a day is 4 or more
 
+    -   binary variable
+
+    -   1 = those who agree a child 6-23 months should receive 4 or more different types of food, 0 = otherwise
+
 -   att_1: attitude gateway 1; percentage of MWRA who agree if a baby is exclusively breastfed for 6 months, he/she is less likely to be sick
+
+    -   binary variable
+
+    -   1 = those who agree that if a baby is exclusively breastfed for 6 months, they are less likely to get sick, 0 = otherwise
 
 -   att_2: attitude gateway 2; percentage of MWRA who agree providing meals 4 times a day ensures them to have adequate strength
 
+    -   binary variable
+
+    -   1 = those who agree providing 4 meals a day ensures strength, 0 = otherwise
+
 -   att_3: attitude gateway 3; percentage of MWRA who agree children who eat a variety of foods are less likely to get sick
+
+    -   binary variable
+
+    -   1 = those who agree children who eat a variety of foods are less likely to get sick
 
 -   se_1: self-efficacy gateway 1; percentage of MWRA who agree giving only breast milk to the baby for the first 6 months is not difficult at all
 
+    -   binary variable
+
+    -   1 = those who agree only giving breast milk to the baby for the first 6 months is not difficult at all, 0 = otherwise
+
 -   se_2: self-efficacy gateway 2; percentage of MRWA who agree giving a child a meal 4 times a day is not difficult at all
+
+    -   binary variable
+
+    -   1 = those who agree giving a child a meal 4 times a day is not difficult at all, 0 = otherwise
 
 -   se_3: self-efficacy gateway 3; percentage of MRWA who say giving a child a minimum of 4 or more different types of food a day is not difficult at all
 
+    -   binary variable
+
+    -   1 = those who agree that giving a child a minimum of 4 or more different types of food a day is not difficult at all, 0 = otherwise
+
 -   pn_1 : perceived norms gateway 1; percentage of MRWA who agree people in the community think it is healthy for a woman to give her baby only breast milk for the first 6 months
+
+    -   binary variable
+
+    -   1 = those who agree people in the community think it is healthy for a woman to give her baby only breast milk for first 6 months, 0 = otherwise
 
 -   pn_2: perceived norms gateway 2; percentage of MRWA who believes the number of meals people in community think a child 6-23 months should eat each day is 4 or more
 
+    -   binary variable
+
+    -   1 = those who believe the number of meals people in the community think a child 6-23 months should eat each day is 4 or more, 0 = otherwise
+
 -   pn_3: perceived norms gateway 3; percentage of MRWA who believes number of different types of food people in the community think a child 6-23 months should eat a day is 4 or more
 
--   exposure to nutrition messages gateway; percentage of MWRA who had heard or seen a message related to breastfeeding or young child nutrition from the radio, health worker, or community event in the past 3 months (combo of 507 and 508?)
+    -   binary variable
 
--   
+    -   1 = those who believe the number of different types of food people in the community think a child 6-23 months should eat a day is 4 or more, 0 = otherwise
+
+-   exp: exposure to nutrition messages gateway; percentage of MWRA who had heard or seen a message related to breastfeeding or young child nutrition from the radio, health worker, or community event in the past 3 months
+
+    -   1 = yes, 0 = no
+
+-   parity: Percentage of MRWA who reported living children and grouped (0 children, 1-2 children, 3-4 children, 5-6 children, and 7+ children)
+
+    -   categorical variable
+
+    -   4 levels: 1-2 children, 3-4 children, 5-6 children, 7+ children
+
+-   antenatal: antenatal care gateway behavior; percentage of MRWA who have given birth in the last 5 years and received antenatal care for their last pregnancy
+
+    -   binary variable --\> not possible to be continuous
+
+    -   1 = received antenatal care, 0 = otherwise
+
+-   dec_1: women's involvement in decision making gateway; Percentage of MRWA who responded that she or her and her partner jointly make decisions regarding household purchases
+
+-   dec_2: women's involvement in decision making gateway; Percentage of MRWA who respond that she or her and her partner jointly make decisions about healthcare
+
+-   dec_3: women's involvement in decision making gateway; Percentage of MRWA who respond that she or her and her partner jointly make decisions about visiting relatives
+
+-   decision_combined: Percentage of MRWA who responded that she OR her and her partner jointly make decisions for all three categories: household purchases, healthcare, and visiting relatives
+
+    -   binary variable
+
+    -   1 = responded either decides herself or jointly with her partner on all three decision categories, 0 = otherwise
+
+-   wg: Percentage of MRWA who belong to a women's community group
+
+    -   
+
+```{r}
+niger <- na.omit(niger)
+niger
+```
+
+Need to recode variables to be proper form:
+
+```{r recoding age}
+breaks <- c(14, 24, 39, 49)
+labels <- c("15 to 24 years", "25 to 39 years", "35 to 49 years")
+niger$age <- cut(niger$age, breaks = breaks, labels = labels, right = FALSE)
+niger
+```
+
+```{r recoding parity}
+breaks <- c(0, 2, 4, 6, Inf)
+labels <- c("1-2 children", "3-4 children", "5-6 children", "7+ children")
+niger$parity <- cut(niger$parity, breaks = breaks, labels = labels, right = FALSE)
+niger
+```
+
+```{r recoding wealth}
+niger$wealth <- factor(niger$wealth, levels = c(1, 2, 3), labels = c("poorest", "middle", "richest"))
+niger
+```
+
+```{r recoding know_1}
+niger$know_1 <- ifelse(niger$know_1 <= 4, 1, 0)
+niger
+```
+
+```{r recoding know_2}
+niger$know_2 <- ifelse(niger$know_2 == 98 | niger$know_2 >= 4, 1, 0)
+niger
+```
+
+```{r recoding know_3}
+niger$know_3 <- ifelse(niger$know_3 == 98 | niger$know_3 >= 4, 1, 0)
+niger
+```
+
+```{r recoding att_1}
+niger$att_1 <- ifelse(niger$att_1 == 3, 1, 0)
+niger
+```
+
+```{r recoding att_2}
+niger$att_2 <- ifelse(niger$att_2 == 3, 1, 0)
+niger
+```
+
+```{r recoding att_3}
+niger$att_3 <- ifelse(niger$att_3 == 3, 1, 0)
+niger
+```
+
+```{r recoding se_1}
+niger$se_1 <- ifelse(niger$se_1 == 3, 1, 0)
+niger
+```
+
+```{r recoding se_2}
+niger$se_2 <- ifelse(niger$se_2 == 3, 1, 0)
+niger
+```
+
+```{r recodingse_3}
+niger$se_3 <- ifelse(niger$se_3 == 3, 1, 0)
+niger
+```
+
+```{r recoding pn_1}
+niger$pn_1 <- ifelse(niger$pn_1 <= 4, 1, 0)
+niger
+```
+
+```{r recoding pn_2}
+niger$pn_2 <- ifelse(niger$pn_2 == 98 | niger$pn_2 >= 4, 1, 0)
+niger
+```
+
+```{r recoding pn_3}
+niger$pn_3 <- ifelse(niger$pn_3 == 98 | niger$pn_3 >= 4, 1, 0)
+niger
+```
+
+```{r recoding antenatal}
+# Identify women who received antenatal care for their most recent birth
+niger <- niger %>%
+  mutate(
+    received_antenatal_care = ifelse(
+      antenatal_m != 98 & antenatal_y != 99, 
+      1, 0
+    )
+  )
+
+# idk how this is supposed to be continuous, so we're gonna keep it binary
+```
+
+```{r recoding decision variables}
+# Create binary variables for each decision field
+niger <- niger %>%
+  mutate(
+    binary_dec_1 = ifelse(dec_1 == 1 | dec_1 == 3, 1, 0),
+    binary_dec_2 = ifelse(dec_2 == 1 | dec_2 == 3, 1, 0),
+    binary_dec_3 = ifelse(dec_3 == 1 | dec_3 == 3, 1, 0)
+  )
+
+# Create combined binary variable
+niger <- niger %>%
+  mutate(
+    decision_combined = ifelse(binary_dec_1 == 1 & binary_dec_2 == 1 & binary_dec_3 == 1, 1, 0)
+  )
+```
+
+```{r recoding wg}
+niger <- niger %>%
+  mutate(
+    wg = ifelse(grepl("[A-I]", wg, ignore.case = TRUE), 1, 0)
+  )
+niger
+```
+
+now let's save the cleaned data to a csv to make it static:
+
+```{r writing to csv}
+write.csv(niger, "CLEANNigerData.csv", row.names = FALSE)
+```
