@@ -1,0 +1,206 @@
+---
+title: "min_meal_freq"
+author: "lisa liubovich"
+date: "2024-04-21"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r loading in packages and data}
+library(tidyverse)
+library(broom)
+library(GGally)
+
+niger <- read_csv("./CLEANNigerData.csv")
+niger
+```
+
+# Model 1
+
+Variables needed:
+
+-   know_2: knowledge gateway 2; percentage of MWRA who reported a child 6-23 months should eat 4 or more meals each day
+
+    -   binary variable
+
+    -   1 = those who agree a child 6-23 months should receive 4 or meals a day, 0 otherwise
+
+-   att_2: attitude gateway 2; percentage of MWRA who agree providing meals 4 times a day ensures them to have adequate strength
+
+    -   binary variable
+
+    -   1 = those who agree providing 4 meals a day ensures strength, 0 = otherwise
+
+-   se_2: self-efficacy gateway 2; percentage of MRWA who agree giving a child a meal 4 times a day is not difficult at all
+
+    -   binary variable
+
+    -   1 = those who agree giving a child a meal 4 times a day is not difficult at all, 0 = otherwise
+
+-   pn_2: perceived norms gateway 2; percentage of MRWA who believes the number of meals people in community think a child 6-23 months should eat each day is 4 or more
+
+    -   binary variable
+
+    -   1 = those who believe the number of meals people in the community think a child 6-23 months should eat each day is 4 or more, 0 = otherwise
+
+-   exp: exposure to nutrition messages gateway; percentage of MWRA who had heard or seen a message related to breastfeeding or young child nutrition from the radio, health worker, or community event in the past 3 months
+
+    -   note: we are doing this bit differently than the authors because it was more simple and streamlined.
+
+-   decision_combined: Percentage of MRWA who responded that she OR her and her partner jointly make decisions for all three categories: household purchases, healthcare, and visiting relatives
+
+    -   binary variable
+
+    -   1 = responded either decides herself or jointly with her partner on all three decision categories, 0 = otherwise
+
+-   wg: Percentage of MRWA who belong to a women's community group
+
+    -   1 belonged to a womens group, 0 otherwise
+
+-   antenatal: antenatal care gateway behavior; percentage of MRWA who have given birth in the last 5 years and received antenatal care for their last pregnancy
+
+    -   binary variable --\> not possible to be continuous
+
+    -   1 = received antenatal care, 0 = otherwise
+
+```{r fitting model 1 and predictions}
+glm_mmf_1 <- glm(know_2 ~ att_2 + se_2 + pn_2 + exp + decision_combined + wg + received_antenatal_care, 
+                 data = niger, 
+                 family = binomial(link = "logit"))
+
+tidy(glm_mmf_1, conf.int = TRUE)
+```
+
+fitted regression surface=
+
+logit$p_{i}$ = -2.772 + 1.745$X_1$ + 0.996$X_2$ + 2.673$X_3$ - 0.168$X_4$ + 0.503$X_5$ + 0.062$X_6$ + 0.063$X_7$
+
+where $pi_i$ is percentage of MWRA who reported a child 6-23 months should eat 4 or more meals each day, $X_1$ is percentage of MWRA who agree providing meals 4 times a day ensures them to have adequate strength, $X_2$ is percentage of MRWA who agree giving a child a meal 4 times a day is not difficult at all, $X_3$ is percentage of MRWA who believes the number of meals people in community think a child 6-23 months should eat each day is 4 or more, $X_4$ is percentage of MWRA who had heard or seen a message related to breastfeeding or young child nutrition from the radio, health worker, or community event in the past 3 months, $X_5$ is Percentage of MRWA who responded that she OR her and her partner jointly make decisions for all three categories: household purchases, healthcare, and visiting relatives, $X_6$ is Percentage of MRWA who belong to a women's community group, and $X_7$ is percentage of MRWA who have given birth in the last 5 years and received antenatal care for their last pregnancy.
+
+These results are quite different than the papers because we used the knowledge gateway survey response as an outcome variable instead of the actual minimum meal frequency outcome variable. We did this because it was impossible to identify the outcome variable used by the researchers because they didn't label anything at all. We can still glean interesting results from this analysis, but this study is nearly impossible to replicate because the original authors did not take any steps to make sure their data was interpretable outside of their own knowledge domain. For similar reasons, the exposure variable is consolidated into one binary variable and the antenatal care variable is binary instead of continuous.
+
+# Model 2
+
+Variables needed:
+
+-   know_2: knowledge gateway 2; percentage of MWRA who reported a child 6-23 months should eat 4 or more meals each day
+
+    -   binary variable
+
+    -   1 = those who agree a child 6-23 months should receive 4 or meals a day, 0 otherwise
+
+-   att_2: attitude gateway 2; percentage of MWRA who agree providing meals 4 times a day ensures them to have adequate strength
+
+    -   binary variable
+
+    -   1 = those who agree providing 4 meals a day ensures strength, 0 = otherwise
+
+-   se_2: self-efficacy gateway 2; percentage of MRWA who agree giving a child a meal 4 times a day is not difficult at all
+
+    -   binary variable
+
+    -   1 = those who agree giving a child a meal 4 times a day is not difficult at all, 0 = otherwise
+
+-   pn_2: perceived norms gateway 2; percentage of MRWA who believes the number of meals people in community think a child 6-23 months should eat each day is 4 or more
+
+    -   binary variable
+
+    -   1 = those who believe the number of meals people in the community think a child 6-23 months should eat each day is 4 or more, 0 = otherwise
+
+-   exp: exposure to nutrition messages gateway; percentage of MWRA who had heard or seen a message related to breastfeeding or young child nutrition from the radio, health worker, or community event in the past 3 months
+
+    -   note: we are doing this bit differently than the authors because it was more simple and streamlined.
+
+-   decision_combined: Percentage of MRWA who responded that she OR her and her partner jointly make decisions for all three categories: household purchases, healthcare, and visiting relatives
+
+    -   binary variable
+
+    -   1 = responded either decides herself or jointly with her partner on all three decision categories, 0 = otherwise
+
+-   wg: Percentage of MRWA who belong to a women's community group
+
+    -   1 belonged to a womens group, 0 otherwise
+
+-   fac_delivery: percentage of MWRA who have given birth in the years preceding the survey who delivered in a facility for their last birth
+
+```{r fitting model 2 and predictions}
+glm_mmf_2 <- glm(know_2 ~ att_2 + se_2 + pn_2 + exp + decision_combined + wg + fac_delivery, 
+                 data = niger, 
+                 family = binomial(link = "logit"))
+
+tidy(glm_mmf_2, conf.int = TRUE)
+```
+
+Fitted regression surface:
+
+logit $p_{i}$ = -2.491 + 1.650$X_1$ + 1.013$X_2$ + 2.664$X_3$ - 0.097$X_4$ + 0.496$X_5$ + 0.051$X_6$ - 0.289 $X_7$
+
+where $pi_i$ is percentage of MWRA who reported a child 6-23 months should eat 4 or more meals each day, $X_1$ is percentage of MWRA who agree providing meals 4 times a day ensures them to have adequate strength, $X_2$ is percentage of MRWA who agree giving a child a meal 4 times a day is not difficult at all, $X_3$ is percentage of MRWA who believes the number of meals people in community think a child 6-23 months should eat each day is 4 or more, $X_4$ is percentage of MWRA who had heard or seen a message related to breastfeeding or young child nutrition from the radio, health worker, or community event in the past 3 months, $X_5$ is Percentage of MRWA who responded that she OR her and her partner jointly make decisions for all three categories: household purchases, healthcare, and visiting relatives, $X_6$ is Percentage of MRWA who belong to a women's community group, and $X_7$ is percentage of MWRA who have given birth in the years preceding the survey who delivered in a facility for their last birth.
+
+These results are quite different than the papers because we used the knowledge gateway survey response as an outcome variable instead of the actual minimum meal frequency outcome variable. We did this because it was impossible to identify the outcome variable used by the researchers because they didn't label anything at all. We can still glean interesting results from this analysis, but this study is nearly impossible to replicate because the original authors did not take any steps to make sure their data was interpretable outside of their own knowledge domain. For similar reasons, the exposure variable is consolidated into one binary variable.
+
+# Model 3
+
+Variables needed:
+
+-   know_2: knowledge gateway 2; percentage of MWRA who reported a child 6-23 months should eat 4 or more meals each day
+
+    -   binary variable
+
+    -   1 = those who agree a child 6-23 months should receive 4 or meals a day, 0 otherwise
+
+-   att_2: attitude gateway 2; percentage of MWRA who agree providing meals 4 times a day ensures them to have adequate strength
+
+    -   binary variable
+
+    -   1 = those who agree providing 4 meals a day ensures strength, 0 = otherwise
+
+-   se_2: self-efficacy gateway 2; percentage of MRWA who agree giving a child a meal 4 times a day is not difficult at all
+
+    -   binary variable
+
+    -   1 = those who agree giving a child a meal 4 times a day is not difficult at all, 0 = otherwise
+
+-   pn_2: perceived norms gateway 2; percentage of MRWA who believes the number of meals people in community think a child 6-23 months should eat each day is 4 or more
+
+    -   binary variable
+
+    -   1 = those who believe the number of meals people in the community think a child 6-23 months should eat each day is 4 or more, 0 = otherwise
+
+-   exp: exposure to nutrition messages gateway; percentage of MWRA who had heard or seen a message related to breastfeeding or young child nutrition from the radio, health worker, or community event in the past 3 months
+
+    -   note: we are doing this bit differently than the authors because it was more simple and streamlined.
+
+-   decision_combined: Percentage of MRWA who responded that she OR her and her partner jointly make decisions for all three categories: household purchases, healthcare, and visiting relatives
+
+    -   binary variable
+
+    -   1 = responded either decides herself or jointly with her partner on all three decision categories, 0 = otherwise
+
+-   wg: Percentage of MRWA who belong to a women's community group
+
+    -   1 belonged to a womens group, 0 otherwise
+
+-   nutrition: percentage of MWRA who spoke with 1) husband/partner, 2) family member, 3) health provider, 4) nobody about child's nutrition
+
+```{r fitting model 3 and predictions}
+niger$nutrition <- relevel(as.factor(niger$nutrition), ref = "4")
+glm_mmf_3 <- glm(know_2 ~ att_2 + se_2 + pn_2 + exp + decision_combined + wg + nutrition, 
+                 data = niger, 
+                 family = binomial(link = "logit"))
+
+tidy(glm_mmf_3, conf.int = TRUE)
+```
+
+Fitted regression surface:
+
+logit $p_{i}$ = -2.673 + 1.765$X_1$ + 1.000$X_2$ +2.688$X_3$ - 0.223$X_4$ + 0.523$X_5$ + 0.077$X_6$ - 2.224$X_7$ - 2.310$X_8$ - 1.603$X_9$
+
+where $pi_i$ is percentage of MWRA who reported a child 6-23 months should eat 4 or more meals each day, $X_1$ is percentage of MWRA who agree providing meals 4 times a day ensures them to have adequate strength, $X_2$ is percentage of MRWA who agree giving a child a meal 4 times a day is not difficult at all, $X_3$ is percentage of MRWA who believes the number of meals people in community think a child 6-23 months should eat each day is 4 or more, $X_4$ is percentage of MWRA who had heard or seen a message related to breastfeeding or young child nutrition from the radio, health worker, or community event in the past 3 months, $X_5$ is Percentage of MRWA who responded that she OR her and her partner jointly make decisions for all three categories: household purchases, healthcare, and visiting relatives, $X_6$ is Percentage of MRWA who belong to a women's community group, $X_7$ percentage of MWRA who spoke with husband/partner about child's nutrition, $X_8$ is the percentage of MWRA who spoke with a family member/friend, and $X_9$ is the percentage of MWRA who spoke with a health worker about their child's nutrition.
+
+These results are quite different than the papers because we used the knowledge gateway survey response as an outcome variable instead of the actual minimum meal frequency outcome variable. We did this because it was impossible to identify the outcome variable used by the researchers because they didn't label anything at all. We can still glean interesting results from this analysis, but this study is nearly impossible to replicate because the original authors did not take any steps to make sure their data was interpretable outside of their own knowledge domain. For similar reasons, the exposure variable is consolidated into one binary variable.
+
+In our final report, we will definitely have to emphasize that because of the original author's major failure to provide any sort of meaningful description of the variables in the data set, our results will look different because we approximated the variables used with our best guesses based on the survey material and data explorer.
