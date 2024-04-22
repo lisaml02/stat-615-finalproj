@@ -1,0 +1,197 @@
+---
+title: "exclusive_breastfeeding_models"
+author: "remy sorensen"
+date: "`r Sys.Date()`"
+output: html_document
+---
+```{r}
+library(tidyverse)
+library(broom)
+library(GGally)
+library(stats)
+```
+
+```{r}
+niger <- read_csv("CLEANNigerData.csv")
+niger
+```
+Logistic Regression Formula:
+= beta0 + beta1 * X1 + beta2 * X2 + beta3 * X3 + beta4 * Z1 + beta5 * Z2 + beta6 * Z3
+
+
+
+# EXCLUSIVE BREASTFEEDING 
+
+3 models: all three models use all gateway factors, model 1 uses any ANC from gateway behaviors, model 2 uses facility delivery from gateway behaviors, and model 3 uses all three variables from communication on child nutrition. the goal is to find the odds ratio (OR) and confidence interval (CI). 
+
+n = 652
+models control for: women's age, parity, educational attainment, household wealth tercile
+Dependent Variable: Breastfeeding for 0-5 month old children 
+
+variables used:
+- gateway factors: 
+  - breastfeeding behavioral determinants: att_1, know_1, se_3, pn_1
+  - exposure to breastfeeding messages in the last 3 months: exp
+  - gender decision-making: decision_combined
+  - womens group participation: wg
+- gateway behaviors: antenatal, fac_delivery, nutrition
+- controls: age, parity, any_edu, wealth
+
+
+variable key:
+
+-   any_edu: percentage of MWRA who reported to have ever gone to school
+    -   binary variable
+    -   0 - no, 1 - yes
+    
+-   parity: Percentage of MRWA who reported living children and grouped (0 children, 1-2 children, 3-4 children, 5-6 children, and 7+ children)
+    -   categorical variable
+    -   4 levels: 1-2 children, 3-4 children, 5-6 children, 7+ children
+    
+-   age: percentage of MWRA who reported their current age and grouped
+    -   factor with 3 levels:
+    -   15 to 24 years
+    -   25 to 34 years
+    -   35 to 49 years
+    
+-   nutrition: percentage of MWRA who spoke with 1) husband/partner, 2) family member, 3) health provider, 4) nobody about child's nutrition
+
+-   att_1: attitude gateway 1; percentage of MWRA who agree if a baby is exclusively breastfed for 6 months, he/she is less likely to be sick
+    -   binary variable
+    -   1 = those who agree that if a baby is exclusively breastfed for 6 months, they are less likely to get sick, 0 = otherwise
+    
+-   know_1: knowledge gateway 1; percentage of MRWA who state it is healthy for a woman to give only breast milk for the first 6 months
+    -   binary variable
+    -   1 = those who agree it is healthy for a woman to give a child only breastmilk for the first 6 months, 0 otherwise
+    
+-   wealth: percentage of MWRA who reported household assets constructed in wealth terciles
+    -   1 = poorest tercile
+    -   2 = middle
+    -   3 = richest
+    
+-   se_3: self-efficacy gateway 3; percentage of MRWA who say giving a child a minimum of 4 or more different types of food a day is not difficult at all
+    -   binary variable
+    -   1 = those who agree that giving a child a minimum of 4 or more different types of food a day is not difficult at all, 0 = otherwise
+
+-   se_1: self-efficacy gateway 1; percentage of MWRA who agree giving only breast milk to the baby for the first 6 months is not difficult at all
+    -   binary variable
+    -   1 = those who agree only giving breast milk to the baby for the first 6 months is not difficult at all, 0 = otherwise
+    
+-   pn_1 : perceived norms gateway 1; percentage of MRWA who agree people in the community think it is healthy for a woman to give her baby only breast milk for the first 6 months
+    -   binary variable
+    -   1 = those who agree people in the community think it is healthy for a woman to give her baby only breast milk for first 6 months, 0 = otherwise
+
+-   exp: exposure to nutrition messages gateway; percentage of MWRA who had heard or seen a message related to breastfeeding or young child nutrition from the radio, health worker, or community event in the past 3 months
+    -   1 = yes, 0 = no   
+
+-   decision_combined: Percentage of MRWA who responded that she OR her and her partner jointly make decisions for all three categories: household purchases, healthcare, and visiting relatives
+    -   binary variable
+    -   1 = responded either decides herself or jointly with her partner on all three decision categories, 0 = otherwise
+
+-   wg: Percentage of MRWA who belong to a women's community group
+   
+-   antenatal: antenatal care gateway behavior; percentage of MRWA who have given birth in the last 5 years and received antenatal care for their last pregnancy
+    -   binary variable --\> not possible to be continuous
+    -   1 = received antenatal care, 0 = otherwise  
+    - (antenatal was recoded to received_antenatal_care)
+
+-   fac_delivery: percentage of MWRA who have given birth in the years preceding the survey who delivered in a facility for their last birth
+ 
+ 
+ 
+# MODEL 1
+
+variables used:
+- gateway factors: 
+  - breastfeeding behavioral determinants: att_1, know_1, se_3, pn_1
+  - exposure to breastfeeding messages in the last 3 months: exp
+  - gender decision-making: decision_combined
+  - womens group participation: wg
+- gateway behaviors: antenatal (antenatal was recoded to received_antenatal_care)
+- controls: age, parity, any_edu, wealth
+- dependant variable(?): se_1
+
+
+```{r}
+model1 <- glm(se_1 ~ know_1 + att_1 + se_3 + pn_1 + exp + decision_combined + wg + received_antenatal_care + age + parity + any_edu + wealth, 
+              data = niger, 
+              family = binomial)
+
+tidy(model1, conf.int = TRUE)
+```
+```{r}
+# OR for model 1
+
+odds_ratios_model1 <- exp(coef(model1))
+odds_ratios_model1
+```
+```{r}
+summary(model1)
+```
+
+
+
+# MODEL 2
+
+variables used:
+- gateway factors: 
+  - breastfeeding behavioral determinants: att_1, know_1, se_3, pn_1
+  - exposure to breastfeeding messages in the last 3 months: exp
+  - gender decision-making: decision_combined
+  - womens group participation: wg
+- gateway behaviors: fac_delivery
+- controls: age, parity, any_edu, wealth
+- dependant variable(?): se_1
+
+
+```{r}
+model2 <- glm(se_1 ~ know_1 + att_1 + se_3 + pn_1 + exp + decision_combined + wg + fac_delivery + age + parity + any_edu + wealth, 
+              data = niger, 
+              family = binomial)
+
+tidy(model2, conf.int = TRUE)
+```
+```{r}
+# OR for model 2
+odds_ratios_model2 <- exp(coef(model2))
+odds_ratios_model2
+```
+```{r}
+summary(model2)
+```
+
+
+
+# MODEL 3
+
+variables used:
+- gateway factors: 
+  - breastfeeding behavioral determinants: att_1, know_1, se_3, pn_1
+  - exposure to breastfeeding messages in the last 3 months: exp
+  - gender decision-making: decision_combined
+  - women's group participation: wg
+- gateway behaviors: nutrition
+- controls: age, parity, any_edu, wealth
+- dependant variable(?): se_1
+
+
+```{r}
+model3 <- glm(se_1 ~ know_1 + att_1 + se_3 + pn_1 + exp + decision_combined + wg + nutrition + age + parity + any_edu + wealth, 
+              data = niger, 
+              family = binomial)
+
+tidy(model3, conf.int = TRUE)
+```
+
+
+
+```{r}
+#OR for model 3
+odds_ratios_model3 <- exp(coef(model3))
+odds_ratios_model3
+```
+
+```{r}
+summary(model3)
+```
+
