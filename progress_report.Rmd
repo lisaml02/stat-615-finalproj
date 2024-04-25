@@ -220,7 +220,9 @@ In our final report, we will definitely have to emphasize that because of the or
 
 3 models: all three models use all gateway factors, model 1 uses any ANC from gateway behaviors, model 2 uses facility delivery from gateway behaviors, and model 3 uses all three variables from communication on child nutrition. the goal is to find the odds ratio (OR) and confidence interval (CI).
 
-n = 652 models control for: women's age, parity, educational attainment, household wealth tercile Dependent Variable: Breastfeeding for 0-5 month old children
+n = 652 
+
+models control for: women's age, parity, educational attainment, household wealth tercile Dependent Variable: Breastfeeding for 0-5 month old children
 
 variables used:
 
