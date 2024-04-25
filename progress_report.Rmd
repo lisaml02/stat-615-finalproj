@@ -332,7 +332,8 @@ odds_ratios_model1
 summary(model1)
 ```
 
-Fitted Regression surface:
+Fitted Regression surface: logit$p_{i}$ = -1.47 + 1.45$X_1$ + 0.306$X_2$ + 1.88$X_3$ - 1.26$X_4$ + 1.67$X_5$ + 0.108$X_6$ + 0.395$X_7$ - 0.133$X_8$
+note: this is without controls in order to be consistent with the format of the other models 
 
 ### Model 2
 
@@ -369,6 +370,9 @@ odds_ratios_model2
 ```{r}
 summary(model2)
 ```
+
+Fitted Regression surface: logit$p_{i}$ = -2.27 + 1.49$X_1$ + 0.429$X_2$ + 1.62$X_3$ - 1.13$X_4$ + 1.55$X_5$ + 0.104$X_6$ + 0.493$X_7$ - 0.979$X_8$
+note: this is without controls in order to be consistent with the format of the other models 
 
 ### Model 3
 
