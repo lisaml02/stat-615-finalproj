@@ -1,0 +1,138 @@
+---
+title: "Project Regression"
+output: word_document
+date: "2024-04-25"
+---
+
+```{r}
+library(tidyverse)
+library(broom)
+library(GGally)
+library(dplyr)
+
+```
+
+
+```{r}
+NG <- read_csv("/Users/hawatoumbou/desktop/REG_615/CLEANNigerData.csv")
+NG
+
+```
+Variables Model 1: 
+- Gateway factors: 
+- breastfeeding behavioral determinants: att_1, know_1, pn_1
+  - att_1: attitude gateway 1; percentage of MWRA who agree if a baby is exclusively breastfed for 6 months, he/she is less likely to be sick
+  - know_1: knowledge gateway 1; percentage of MRWA who state it is healthy for a woman to give only breast milk for the first 6 months
+  - pn_1 : perceived norms gateway 1; percentage of MRWA who agree people in the community think it is healthy for a woman to give her baby only breast milk for the first 6 months
+
+
+- exposure to breastfeeding messages in the last 3 months: exp
+  -  exp: exposure to nutrition messages gateway; percentage of MWRA who had heard or seen a message related to breastfeeding or young child nutrition from the radio, health worker, or community event in the past 3 months
+  
+- gender decision-making: decision_combined
+   - decision_combined: Percentage of MRWA who responded that she OR her and her partner jointly make decisions for all three categories: household purchases, healthcare, and visiting relatives
+    
+  
+- womens group participation: wg
+  - Percentage of MRWA who belong to a women's community group
+  
+- gateway behaviors: antenatal 
+  -antenatal care gateway behavior; percentage of MRWA who have given birth in the last 5 years and received antenatal care for their last pregnancy
+
+
+```{r}
+model_1 <- glm( se_1 ~ know_1 + att_1 + pn_1 + exp + decision_combined + wg + received_antenatal_care, 
+              family = binomial(link = "logit"), 
+              data = NG)
+model_1
+tidy(model_1, conf.int = TRUE)
+
+```
+fitted regression surface=
+logit$p_{i}$ = -0.9988 + 1.462$X_1$ - 0.03529$X_2$ -1.199$X_3$ + 1.866$X_4$ +0.1011$X_5$ + 0.2326$X_6$ +0.01295$X_7$
+X1: knowledge gateway 
+X2: Attitude gateway 
+X3: Perceived Normal Gateway 
+X4: Exposure 
+X5: Decision Combined - decisions for all three categories: household purchases, healthcare, and visiting relatives
+X6: Women's community group
+X7: antenatal care 
+
+
+
+Variables Model 2: 
+- Gateway factors: 
+- breastfeeding behavioral determinants: att_1, know_1, pn_1
+  - att_1: attitude gateway 1; percentage of MWRA who agree if a baby is exclusively breastfed for 6 months, he/she is less likely to be sick
+  - know_1: knowledge gateway 1; percentage of MRWA who state it is healthy for a woman to give only breast milk for the first 6 months
+  - pn_1 : perceived norms gateway 1; percentage of MRWA who agree people in the community think it is healthy for a woman to give her baby only breast milk for the first 6 months
+
+
+- exposure to breastfeeding messages in the last 3 months: exp
+  -  exp: exposure to nutrition messages gateway; percentage of MWRA who had heard or seen a message related to breastfeeding or young child nutrition from the radio, health worker, or community event in the past 3 months
+  
+- gender decision-making: decision_combined
+   - decision_combined: Percentage of MRWA who responded that she OR her and her partner jointly make decisions for all three categories: household purchases, healthcare, and visiting relatives
+      -binary variable
+        -  1 = responded either decides herself or jointly with her partner on all three decision categories, 0 = otherwise
+  
+- womens group participation: wg
+  - Percentage of MRWA who belong to a women's community group
+  
+- gateway behaviors: facility delivery  
+  - fac_delivery: percentage of MWRA who have given birth in the years preceding the survey who delivered in a facility for their last birth
+
+```{r}
+model_2 <- glm(se_1 ~ know_1 + att_1 + pn_1  + exp + decision_combined + wg + fac_delivery, 
+              family = binomial(link = "logit"), 
+              data = NG)
+
+tidy(model_2, conf.int = TRUE)
+```
+logit$p_{i}$ = -2.104 + 1.512$X_1$ + 0.1733$X_2$ -1.065$X_3$ + 1.681$X_4$ +0.1139$X_5$ + 0.3802$X_6$ +1.403$X_7$
+X1: knowledge gateway 
+X2: Attitude gateway 
+X3: Perceived Normal Gateway 
+X4: Exposure 
+X5: Decision Combined - decisions for all three categories: household purchases, healthcare, and visiting relatives
+X6: Women's community group
+X7: facility delivery
+
+
+
+
+
+Variables Model 3: 
+- Gateway factors: 
+- breastfeeding behavioral determinants: att_1, know_1, pn_1
+  - att_1: attitude gateway 1; percentage of MWRA who agree if a baby is exclusively breastfed for 6 months, he/she is less likely to be sick
+  - know_1: knowledge gateway 1; percentage of MRWA who state it is healthy for a woman to give only breast milk for the first 6 months
+  - pn_1 : perceived norms gateway 1; percentage of MRWA who agree people in the community think it is healthy for a woman to give her baby only breast milk for the first 6 months
+
+
+- exposure to breastfeeding messages in the last 3 months: exp
+  -  exp: exposure to nutrition messages gateway; percentage of MWRA who had heard or seen a message related to breastfeeding or young child nutrition from the radio, health worker, or community event in the past 3 months
+  
+- gender decision-making: decision_combined
+   - decision_combined: Percentage of MRWA who responded that she OR her and her partner jointly make decisions for all three categories: household purchases, healthcare, and visiting relatives
+    
+  
+- womens group participation: wg
+  - Percentage of MRWA who belong to a women's community group
+- gateway behaviors: nutrition  
+```{r}
+model3 <- glm(se_1 ~ know_1 + att_1  + pn_1 + exp + decision_combined + wg + nutrition,  
+              family = binomial(link = "logit"), 
+              data = NG)
+tidy(model3, conf.int = TRUE)
+```
+
+logit$p_{i}$ = -0.967 + 1.471$X_1$ + -0.04103$X_2$ -1.205$X_3$ + 1.853$X_4$ +0.1002$X_5$ + 0.2391$X_6$ -0.00149$X_7$
+X1: knowledge gateway 
+X2: Attitude gateway 
+X3: Perceived Normal Gateway 
+X4: Exposure 
+X5: Decision Combined - decisions for all three categories: household purchases, healthcare, and visiting relatives
+X6: Women's community group
+X7: Communication about nutrition 
+
