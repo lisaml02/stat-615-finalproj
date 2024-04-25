@@ -519,6 +519,18 @@ model_diet_1 <- glm(know_3 ~ know_2 + att_3 + se_3 + pn_3 + wg + decision_combin
 
 tidy(model_diet_1, conf.int = TRUE)
 ```
+Fitted Regression surface: logit$p_{i}$ = -5.29 + 2.13$X_1$ + 1.07$X_2$ + 1.21 $X_3$ + 2.54$X_4$ + 0.536$X_5$ + 0.169$X_6$ + 0.471$X_7$ - 0.117$X_8$
+note: this is without controls in order to be consistent with the format of the other models 
+
+X1: knowledge gateway 
+X2: Attitude gateway 
+X3: Self-efficacy 
+X4: Perceived Normal Gateway 
+X5:  Women's community group
+X6: Decision Combined - decisions for all three categories: household purchases, healthcare, and visiting relatives
+X7: Exposure 
+X8: Antenatal Care
+
 
 ```{r}
 # OR for model 1
@@ -542,6 +554,19 @@ model_diet_2 <- glm(know_3 ~ know_2 + att_3 + se_3 + pn_3 + wg + decision_combin
 
 tidy(model_diet_2, conf.int = TRUE)
 ```
+Fitted Regression surface: logit$p_{i}$ = -5.41 + 2.14$X_1$ + 1.08$X_2$ + 1.20 $X_3$ + 2.54$X_4$ + 0.544$X_5$ + 0.187$X_6$ + 0.457$X_7$ + 0.0514$X_8$
+note: this is without controls in order to be consistent with the format of the other models 
+
+X1: knowledge gateway 
+X2: Attitude gateway 
+X3: Self-efficacy 
+X4: Perceived Normal Gateway 
+X5:  Women's community group
+X6: Decision Combined - decisions for all three categories: household purchases, healthcare, and visiting relatives
+X7: Exposure 
+X8: fac_delivery
+
+
 
 ```{r}
 # OR for model 2
@@ -565,6 +590,19 @@ model_diet_3 <- glm(know_3 ~ know_2 + att_3 + se_3 + pn_3 + wg + decision_combin
 
 tidy(model_diet_3, conf.int = TRUE)
 ```
+Fitted Regression surface: logit$p_{i}$ = -5.15 + 2.21$X_1$ + 0.977$X_2$ + 1.19 $X_3$ + 2.70$X_4$ + 0.586$X_5$ + 0.161$X_6$ + 0.303$X_7$ -0.0215$X_8$
+note: this is without controls in order to be consistent with the format of the other models 
+
+X1: knowledge gateway 
+X2: Attitude gateway 
+X3: Self-efficacy 
+X4: Perceived Normal Gateway 
+X5:  Women's community group
+X6: Decision Combined - decisions for all three categories: household purchases, healthcare, and visiting relatives
+X7: Exposure 
+X8: nutrition
+
+
 
 ```{r}
 # OR for model 3
