@@ -411,6 +411,9 @@ odds_ratios_model3
 ```{r}
 summary(model3)
 ```
+Fitted Regression surface: logit$p_{i}$ = -1.61 + 1.46$X_1$ + 0.324$X_2$ + 1.87$X_3$ - 1.26$X_4$ + 1.67$X_5$ + 0.125$X_6$ + 0.397$X_7$ - 0.000787$X_8$
+note: this is without controls in order to be consistent with the format of the other models 
+
 
 Fitted Regression Surface
 
