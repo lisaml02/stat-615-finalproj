@@ -1,0 +1,149 @@
+---
+title: "min_dietary_diversity"
+author: "remy sorensen"
+date: "`r Sys.Date()`"
+output: html_document
+---
+```{r}
+library(tidyverse)
+library(broom)
+library(GGally)
+library(stats)
+```
+
+```{r}
+niger <- read_csv("CLEANNigerData.csv")
+niger
+```
+# MINIMUM DIETARY DIVERSITY
+
+Variables Used:
+- gateway factors: 
+     - minimun dietary diversity behavioral detriments: know_2, att_3, se_3, pn_3
+     - exposure to nutritional messages: wg, decision_combined, exp
+- gateway behaviors: antenatal, fac_delivery, nutrition
+- controls: age, parity, any_edu, wealth
+-response; know_3
+
+
+Variable Key:
+
+-   know 3: knowledge gateway 3; percentage of MWRA who reported that the number of different types of food a child 6-23 months should eat a day is 4 or more
+    -   binary variable
+    -   1 = those who agree a child 6-23 months should receive 4 or more different types of food, 0 = otherwise
+    
+-   pn_3: perceived norms gateway 3; percentage of MRWA who believes number of different types of food people in the community think a child 6-23 months should eat a day is 4 or more
+    -   binary variable
+    -   1 = those who believe the number of different types of food people in the community think a child 6-23 months should eat a day is 4 or more, 0 = otherwise
+    
+-   se_3: self-efficacy gateway 3; percentage of MRWA who say giving a child a minimum of 4 or more different types of food a day is not difficult at all
+    -   binary variable
+    -   1 = those who agree that giving a child a minimum of 4 or more different types of food a day is not difficult at all, 0 = otherwise
+    
+-   att_3: attitude gateway 3; percentage of MWRA who agree children who eat a variety of foods are less likely to get sick
+    -   binary variable
+    -   1 = those who agree children who eat a variety of foods are less likely to get sick
+    
+-   exp: exposure to nutrition messages gateway; percentage of MWRA who had heard or seen a message related to breastfeeding or young child nutrition from the radio, health worker, or community event in the past 3 months
+    -   note: we are doing this bit differently than the authors because it was more simple and streamlined.
+
+-   decision_combined: Percentage of MRWA who responded that she OR her and her partner jointly make decisions for all three categories: household purchases, healthcare, and visiting relatives
+    -   binary variable
+    -   1 = responded either decides herself or jointly with her partner on all three decision categories, 0 = otherwise
+
+-   wg: Percentage of MRWA who belong to a women's community group
+    -   1 belonged to a womens group, 0 otherwise
+
+-   antenatal: antenatal care gateway behavior; percentage of MRWA who have given birth in the last 5 years and received antenatal care for their last pregnancy
+    -   binary variable --\> not possible to be continuous
+    -   1 = received antenatal care, 0 = otherwise
+
+-   any_edu: percentage of MWRA who reported to have ever gone to school
+    -   binary variable
+    -   0 - no, 1 - yes
+    
+-   parity: Percentage of MRWA who reported living children and grouped (0 children, 1-2 children, 3-4 children, 5-6 children, and 7+ children)
+    -   categorical variable
+    -   4 levels: 1-2 children, 3-4 children, 5-6 children, 7+ children
+    
+-   age: percentage of MWRA who reported their current age and grouped
+    -   factor with 3 levels:
+    -   15 to 24 years
+    -   25 to 34 years
+    -   35 to 49 years
+    
+-   nutrition: percentage of MWRA who spoke with 1) husband/partner, 2) family member, 3) health provider, 4) nobody about child's nutrition
+
+-   fac_delivery: percentage of MWRA who have given birth in the years preceding the survey who delivered in a facility for their last birth
+
+-   wealth: percentage of MWRA who reported household assets constructed in wealth terciles
+    -   1 = poorest tercile
+    -   2 = middle
+    -   3 = richest
+    
+-   know_2: knowledge gateway 2; percentage of MWRA who reported a child 6-23 months should eat 4 or more meals each day
+    -   binary variable
+    -   1 = those who agree a child 6-23 months should receive 4 or meals a day, 0 otherwise
+
+
+# model 1
+```{r}
+model_diet_1 <- glm(know_3 ~ know_2 + att_3 + se_3 + pn_3 + wg + decision_combined + exp + received_antenatal_care + age + parity + any_edu + wealth,
+                 data = niger, 
+                 family = binomial)
+
+tidy(model_diet_1, conf.int = TRUE)
+```
+```{r}
+# OR for model 1
+
+odds_ratios_model_diet_1 <- exp(coef(model_diet_1))
+odds_ratios_model_diet_1
+```
+```{r}
+summary(odds_ratios_model_diet_1)
+```
+
+# model 2
+```{r}
+model_diet_2 <- glm(know_3 ~ know_2 + att_3 + se_3 + pn_3 + wg + decision_combined + exp + fac_delivery + age + parity + any_edu + wealth,
+                 data = niger, 
+                 family = binomial)
+
+tidy(model_diet_2, conf.int = TRUE)
+```
+```{r}
+# OR for model 2
+
+odds_ratios_model_diet_2 <- exp(coef(model_diet_2))
+odds_ratios_model_diet_2
+```
+```{r}
+summary(model_diet_2)
+```
+
+
+
+
+# model 3
+
+```{r}
+model_diet_3 <- glm(know_3 ~ know_2 + att_3 + se_3 + pn_3 + wg + decision_combined + exp + nutrition + age + parity + any_edu + wealth,
+                 data = niger, 
+                 family = binomial)
+
+tidy(model_diet_3, conf.int = TRUE)
+```
+
+
+```{r}
+# OR for model 3
+
+odds_ratios_model_diet_3 <- exp(coef(model_diet_3))
+odds_ratios_model_diet_3
+```
+```{r}
+summary(model_diet_3)
+```
+
+
