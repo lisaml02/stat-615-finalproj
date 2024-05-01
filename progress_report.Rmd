@@ -23,6 +23,8 @@ Link to article, which describes the different kinds of models used: <https://jo
 library(tidyverse)
 library(broom)
 library(ggplot2)
+library(stats)
+library(GGally)
 
 niger <- read_csv("./CLEANNigerData.csv")
 ```
