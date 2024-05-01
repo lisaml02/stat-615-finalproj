@@ -725,10 +725,10 @@ Variables Model 3:
 
 
 ```{r}
-model3 <- glm(se_1 ~ know_1 + att_1  + pn_1 + exp + decision_combined + wg + nutrition,  
+model_3 <- glm(se_1 ~ know_1 + att_1  + pn_1 + exp + decision_combined + wg + nutrition,  
               family = binomial(link = "logit"), 
               data = niger)
-tidy(model3, conf.int = TRUE)
+tidy(model_3, conf.int = TRUE)
 ```
 logit$p_{i}$ = -0.967 + 1.471$X_1$ + -0.04103$X_2$ -1.205$X_3$ + 1.853$X_4$ +0.1002$X_5$ + 0.2391$X_6$ -0.00149$X_7$
 X1: knowledge gateway 
