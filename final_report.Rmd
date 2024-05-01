@@ -1,0 +1,46 @@
+---
+title: "final_report"
+author: "lisa liubovich"
+date: "2024-05-01"
+output: pdf_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# Final Report: **Application of the integrated gateway model on child nutrition behaviors in Niger**
+
+## by Lisa Liubovich, Remy Sorensen, and Hawa Toumbou
+
+\* This should be an executive summary with lots of bullet points. Don\'t make me read text not immediate relevant to the project. No yapping. \* - from the instructions :)
+
+# Introduction
+
+Summarize papers goals: this part should be very short!!
+
+# Summary of the Data
+
+Describe the data
+
+# Models and Methods
+
+summarize the models we used and the methods we used to create them (ie. if we're going to end up using auto selection, why we included controls in some models and not others, how we selected variables)
+
+# Assumptions
+
+check assumptions for logistic regression model
+
+# Interpretation of Results
+
+Interpretation of coefficients, measures of uncertainty, etc,
+
+# Critiques/Expansion of Analysis
+
+Professor is most interested in this, so we need to spend some time on this one. He said in our feedback that our critiques should be pretty obvious (ie. the lack of meaningful descriptions of the data and the struggles that ended up creating)
+
+# Findings and Conclusion
+
+spend very little time on this
+
+## note: 4 pages double spaced, 12 pt font MAX (not including graphics/tables/code)
