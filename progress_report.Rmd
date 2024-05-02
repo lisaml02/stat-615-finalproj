@@ -23,7 +23,8 @@ Link to article, which describes the different kinds of models used: <https://jo
 library(tidyverse)
 library(broom)
 library(ggplot2)
-
+library(stats)
+library(GGally)
 niger <- read_csv("./CLEANNigerData.csv")
 ```
 
@@ -89,7 +90,7 @@ fitted regression surface=
 
 logit$p_{i}$ = -2.772 + 1.745$X_1$ + 0.996$X_2$ + 2.673$X_3$ - 0.168$X_4$ + 0.503$X_5$ + 0.062$X_6$ + 0.063$X_7$
 
-where $pi_i$ is percentage of MWRA who reported a child 6-23 months should eat 4 or more meals each day, $X_1$ is percentage of MWRA who agree providing meals 4 times a day ensures them to have adequate strength, $X_2$ is percentage of MRWA who agree giving a child a meal 4 times a day is not difficult at all, $X_3$ is percentage of MRWA who believes the number of meals people in community think a child 6-23 months should eat each day is 4 or more, $X_4$ is percentage of MWRA who had heard or seen a message related to breastfeeding or young child nutrition from the radio, health worker, or community event in the past 3 months, $X_5$ is Percentage of MRWA who responded that she OR her and her partner jointly make decisions for all three categories: household purchases, healthcare, and visiting relatives, $X_6$ is Percentage of MRWA who belong to a women's community group, and $X_7$ is percentage of MRWA who have given birth in the last 5 years and received antenatal care for their last pregnancy.
+where $p_i$ is percentage of MWRA who reported a child 6-23 months should eat 4 or more meals each day, $X_1$ is percentage of MWRA who agree providing meals 4 times a day ensures them to have adequate strength, $X_2$ is percentage of MRWA who agree giving a child a meal 4 times a day is not difficult at all, $X_3$ is percentage of MRWA who believes the number of meals people in community think a child 6-23 months should eat each day is 4 or more, $X_4$ is percentage of MWRA who had heard or seen a message related to breastfeeding or young child nutrition from the radio, health worker, or community event in the past 3 months, $X_5$ is Percentage of MRWA who responded that she OR her and her partner jointly make decisions for all three categories: household purchases, healthcare, and visiting relatives, $X_6$ is Percentage of MRWA who belong to a women's community group, and $X_7$ is percentage of MRWA who have given birth in the last 5 years and received antenatal care for their last pregnancy.
 
 These results are quite different than the papers because we used the knowledge gateway survey response as an outcome variable instead of the actual minimum meal frequency outcome variable. We did this because it was impossible to identify the outcome variable used by the researchers because they didn't label anything at all. We can still glean interesting results from this analysis, but this study is nearly impossible to replicate because the original authors did not take any steps to make sure their data was interpretable outside of their own knowledge domain. For similar reasons, the exposure variable is consolidated into one binary variable and the antenatal care variable is binary instead of continuous.
 
@@ -149,7 +150,7 @@ Fitted regression surface:
 
 logit $p_{i}$ = -2.491 + 1.650$X_1$ + 1.013$X_2$ + 2.664$X_3$ - 0.097$X_4$ + 0.496$X_5$ + 0.051$X_6$ - 0.289 $X_7$
 
-where $pi_i$ is percentage of MWRA who reported a child 6-23 months should eat 4 or more meals each day, $X_1$ is percentage of MWRA who agree providing meals 4 times a day ensures them to have adequate strength, $X_2$ is percentage of MRWA who agree giving a child a meal 4 times a day is not difficult at all, $X_3$ is percentage of MRWA who believes the number of meals people in community think a child 6-23 months should eat each day is 4 or more, $X_4$ is percentage of MWRA who had heard or seen a message related to breastfeeding or young child nutrition from the radio, health worker, or community event in the past 3 months, $X_5$ is Percentage of MRWA who responded that she OR her and her partner jointly make decisions for all three categories: household purchases, healthcare, and visiting relatives, $X_6$ is Percentage of MRWA who belong to a women's community group, and $X_7$ is percentage of MWRA who have given birth in the years preceding the survey who delivered in a facility for their last birth.
+where $p_i$ is percentage of MWRA who reported a child 6-23 months should eat 4 or more meals each day, $X_1$ is percentage of MWRA who agree providing meals 4 times a day ensures them to have adequate strength, $X_2$ is percentage of MRWA who agree giving a child a meal 4 times a day is not difficult at all, $X_3$ is percentage of MRWA who believes the number of meals people in community think a child 6-23 months should eat each day is 4 or more, $X_4$ is percentage of MWRA who had heard or seen a message related to breastfeeding or young child nutrition from the radio, health worker, or community event in the past 3 months, $X_5$ is Percentage of MRWA who responded that she OR her and her partner jointly make decisions for all three categories: household purchases, healthcare, and visiting relatives, $X_6$ is Percentage of MRWA who belong to a women's community group, and $X_7$ is percentage of MWRA who have given birth in the years preceding the survey who delivered in a facility for their last birth.
 
 These results are quite different than the papers because we used the knowledge gateway survey response as an outcome variable instead of the actual minimum meal frequency outcome variable. We did this because it was impossible to identify the outcome variable used by the researchers because they didn't label anything at all. We can still glean interesting results from this analysis, but this study is nearly impossible to replicate because the original authors did not take any steps to make sure their data was interpretable outside of their own knowledge domain. For similar reasons, the exposure variable is consolidated into one binary variable.
 
@@ -220,7 +221,7 @@ In our final report, we will definitely have to emphasize that because of the or
 
 3 models: all three models use all gateway factors, model 1 uses any ANC from gateway behaviors, model 2 uses facility delivery from gateway behaviors, and model 3 uses all three variables from communication on child nutrition. the goal is to find the odds ratio (OR) and confidence interval (CI).
 
-n = 652 
+n = 652
 
 models control for: women's age, parity, educational attainment, household wealth tercile Dependent Variable: Breastfeeding for 0-5 month old children
 
@@ -332,8 +333,7 @@ odds_ratios_model1
 summary(model1)
 ```
 
-Fitted Regression surface: logit$p_{i}$ = -1.47 + 1.45$X_1$ + 0.306$X_2$ + 1.88$X_3$ - 1.26$X_4$ + 1.67$X_5$ + 0.108$X_6$ + 0.395$X_7$ - 0.133$X_8$
-note: this is without controls in order to be consistent with the format of the other models 
+Fitted Regression surface: logit$p_{i}$ = -1.47 + 1.45$X_1$ + 0.306$X_2$ + 1.88$X_3$ - 1.26$X_4$ + 1.67$X_5$ + 0.108$X_6$ + 0.395$X_7$ - 0.133$X_8$ note: this is without controls in order to be consistent with the format of the other models
 
 where $pi_i$ is the percentage of MWRA who agree giving only breast milk to the baby for the first 6 months is not difficult at all, $X_1$ is the percentage of MRWA who state it is healthy for a woman to give only breast milk for the first 6 months, $X_2$ is the percentage of MWRA who agree if a baby is exclusively breastfed for 6 months, he/she is less likely to be sick, $X_3$ is the percentage of MRWA who say giving a child a minimum of 4 or more different types of food a day is not difficult at all, $X_4$ is the percentage of MRWA who agree people in the community think it is healthy for a woman to give her baby only breast milk for the first 6 months $X_5$ is the percentage of MWRA who had heard or seen a message related to breastfeeding or young child nutrition from the radio, health worker, or community event in the past 3 months, $X_6$ is the Percentage of MRWA who responded that she OR her and her partner jointly make decisions for all three categories: household purchases, healthcare, and visiting relatives, $X_7$ is the Percentage of MRWA who belong to a women's community group, and $X_8$ is the percentage of MRWA who have given birth in the last 5 years and received antenatal care for their last pregnancy.
 
@@ -343,7 +343,7 @@ variables used:
 
 \- gateway factors:
 
- - breastfeeding behavioral determinants: att_1, know_1, se_3, pn_1
+-   breastfeeding behavioral determinants: att_1, know_1, se_3, pn_1
 
 \- exposure to breastfeeding messages in the last 3 months: exp
 
@@ -373,11 +373,9 @@ odds_ratios_model2
 summary(model2)
 ```
 
-Fitted Regression surface: logit$p_{i}$ = -2.27 + 1.49$X_1$ + 0.429$X_2$ + 1.62$X_3$ - 1.13$X_4$ + 1.55$X_5$ + 0.104$X_6$ + 0.493$X_7$ - 0.979$X_8$
-note: this is without controls in order to be consistent with the format of the other models 
+Fitted Regression surface: logit$p_{i}$ = -2.27 + 1.49$X_1$ + 0.429$X_2$ + 1.62$X_3$ - 1.13$X_4$ + 1.55$X_5$ + 0.104$X_6$ + 0.493$X_7$ - 0.979$X_8$ note: this is without controls in order to be consistent with the format of the other models
 
 where $pi_i$ is the percentage of MWRA who agree giving only breast milk to the baby for the first 6 months is not difficult at all, $X_1$ is the percentage of MRWA who state it is healthy for a woman to give only breast milk for the first 6 months, $X_2$ is the percentage of MWRA who agree if a baby is exclusively breastfed for 6 months, he/she is less likely to be sick, $X_3$ is the percentage of MRWA who say giving a child a minimum of 4 or more different types of food a day is not difficult at all, $X_4$ is the percentage of MRWA who agree people in the community think it is healthy for a woman to give her baby only breast milk for the first 6 months $X_5$ is the percentage of MWRA who had heard or seen a message related to breastfeeding or young child nutrition from the radio, health worker, or community event in the past 3 months, $X_6$ is the Percentage of MRWA who responded that she OR her and her partner jointly make decisions for all three categories: household purchases, healthcare, and visiting relatives, $X_7$ is the Percentage of MRWA who belong to a women's community group, and $X_8$ is the percentage of MWRA who have given birth in the years preceding the survey who delivered in a facility for their last birth.
-
 
 ### Model 3
 
@@ -416,11 +414,10 @@ odds_ratios_model3
 ```{r}
 summary(model3)
 ```
-Fitted Regression surface: logit$p_{i}$ = -1.61 + 1.46$X_1$ + 0.324$X_2$ + 1.87$X_3$ - 1.26$X_4$ + 1.67$X_5$ + 0.125$X_6$ + 0.397$X_7$ - 0.000787$X_8$
-note: this is without controls in order to be consistent with the format of the other models 
+
+Fitted Regression surface: logit$p_{i}$ = -1.61 + 1.46$X_1$ + 0.324$X_2$ + 1.87$X_3$ - 1.26$X_4$ + 1.67$X_5$ + 0.125$X_6$ + 0.397$X_7$ - 0.000787$X_8$ note: this is without controls in order to be consistent with the format of the other models
 
 where $pi_i$ is the percentage of MWRA who agree giving only breast milk to the baby for the first 6 months is not difficult at all, $X_1$ is the percentage of MRWA who state it is healthy for a woman to give only breast milk for the first 6 months, $X_2$ is the percentage of MWRA who agree if a baby is exclusively breastfed for 6 months, he/she is less likely to be sick, $X_3$ is the percentage of MRWA who say giving a child a minimum of 4 or more different types of food a day is not difficult at all, $X_4$ is the percentage of MRWA who agree people in the community think it is healthy for a woman to give her baby only breast milk for the first 6 months $X_5$ is the percentage of MWRA who had heard or seen a message related to breastfeeding or young child nutrition from the radio, health worker, or community event in the past 3 months, $X_6$ is the Percentage of MRWA who responded that she OR her and her partner jointly make decisions for all three categories: household purchases, healthcare, and visiting relatives, $X_7$ is the Percentage of MRWA who belong to a women's community group, and $X_8$ is the percentage of MWRA who spoke with 1) husband/partner, 2) family member, 3) health provider, 4) nobody about child's nutrition.
-
 
 ## Minimum Dietary Diversity
 
@@ -519,18 +516,10 @@ model_diet_1 <- glm(know_3 ~ know_2 + att_3 + se_3 + pn_3 + wg + decision_combin
 
 tidy(model_diet_1, conf.int = TRUE)
 ```
-Fitted Regression surface: logit$p_{i}$ = -5.29 + 2.13$X_1$ + 1.07$X_2$ + 1.21 $X_3$ + 2.54$X_4$ + 0.536$X_5$ + 0.169$X_6$ + 0.471$X_7$ - 0.117$X_8$
-note: this is without controls in order to be consistent with the format of the other models 
 
-X1: knowledge gateway 
-X2: Attitude gateway 
-X3: Self-efficacy 
-X4: Perceived Normal Gateway 
-X5:  Women's community group
-X6: Decision Combined - decisions for all three categories: household purchases, healthcare, and visiting relatives
-X7: Exposure 
-X8: Antenatal Care
+Fitted Regression surface: logit$p_{i}$ = -5.29 + 2.13$X_1$ + 1.07$X_2$ + 1.21 $X_3$ + 2.54$X_4$ + 0.536$X_5$ + 0.169$X_6$ + 0.471$X_7$ - 0.117$X_8$ note: this is without controls in order to be consistent with the format of the other models
 
+X1: knowledge gateway X2: Attitude gateway X3: Self-efficacy X4: Perceived Normal Gateway X5: Women's community group X6: Decision Combined - decisions for all three categories: household purchases, healthcare, and visiting relatives X7: Exposure X8: Antenatal Care
 
 ```{r}
 # OR for model 1
@@ -554,19 +543,10 @@ model_diet_2 <- glm(know_3 ~ know_2 + att_3 + se_3 + pn_3 + wg + decision_combin
 
 tidy(model_diet_2, conf.int = TRUE)
 ```
-Fitted Regression surface: logit$p_{i}$ = -5.41 + 2.14$X_1$ + 1.08$X_2$ + 1.20 $X_3$ + 2.54$X_4$ + 0.544$X_5$ + 0.187$X_6$ + 0.457$X_7$ + 0.0514$X_8$
-note: this is without controls in order to be consistent with the format of the other models 
 
-X1: knowledge gateway 
-X2: Attitude gateway 
-X3: Self-efficacy 
-X4: Perceived Normal Gateway 
-X5:  Women's community group
-X6: Decision Combined - decisions for all three categories: household purchases, healthcare, and visiting relatives
-X7: Exposure 
-X8: fac_delivery
+Fitted Regression surface: logit$p_{i}$ = -5.41 + 2.14$X_1$ + 1.08$X_2$ + 1.20 $X_3$ + 2.54$X_4$ + 0.544$X_5$ + 0.187$X_6$ + 0.457$X_7$ + 0.0514$X_8$ note: this is without controls in order to be consistent with the format of the other models
 
-
+X1: knowledge gateway X2: Attitude gateway X3: Self-efficacy X4: Perceived Normal Gateway X5: Women's community group X6: Decision Combined - decisions for all three categories: household purchases, healthcare, and visiting relatives X7: Exposure X8: fac_delivery
 
 ```{r}
 # OR for model 2
@@ -590,19 +570,10 @@ model_diet_3 <- glm(know_3 ~ know_2 + att_3 + se_3 + pn_3 + wg + decision_combin
 
 tidy(model_diet_3, conf.int = TRUE)
 ```
-Fitted Regression surface: logit$p_{i}$ = -5.15 + 2.21$X_1$ + 0.977$X_2$ + 1.19 $X_3$ + 2.70$X_4$ + 0.586$X_5$ + 0.161$X_6$ + 0.303$X_7$ -0.0215$X_8$
-note: this is without controls in order to be consistent with the format of the other models 
 
-X1: knowledge gateway 
-X2: Attitude gateway 
-X3: Self-efficacy 
-X4: Perceived Normal Gateway 
-X5:  Women's community group
-X6: Decision Combined - decisions for all three categories: household purchases, healthcare, and visiting relatives
-X7: Exposure 
-X8: nutrition
+Fitted Regression surface: logit$p_{i}$ = -5.15 + 2.21$X_1$ + 0.977$X_2$ + 1.19 $X_3$ + 2.70$X_4$ + 0.586$X_5$ + 0.161$X_6$ + 0.303$X_7$ -0.0215$X_8$ note: this is without controls in order to be consistent with the format of the other models
 
-
+X1: knowledge gateway X2: Attitude gateway X3: Self-efficacy X4: Perceived Normal Gateway X5: Women's community group X6: Decision Combined - decisions for all three categories: household purchases, healthcare, and visiting relatives X7: Exposure X8: nutrition
 
 ```{r}
 # OR for model 3
@@ -620,26 +591,16 @@ Fitted Regression Surface
 ## Early Initiation of Breastfeeding
 
 ### Model 1
-Variables Model 1: 
-- Gateway factors: 
-- breastfeeding behavioral determinants: att_1, know_1, pn_1
-  - att_1: attitude gateway 1; percentage of MWRA who agree if a baby is exclusively breastfed for 6 months, he/she is less likely to be sick
-  - know_1: knowledge gateway 1; percentage of MRWA who state it is healthy for a woman to give only breast milk for the first 6 months
-  - pn_1 : perceived norms gateway 1; percentage of MRWA who agree people in the community think it is healthy for a woman to give her baby only breast milk for the first 6 months
 
+Variables Model 1: - Gateway factors: - breastfeeding behavioral determinants: att_1, know_1, pn_1 - att_1: attitude gateway 1; percentage of MWRA who agree if a baby is exclusively breastfed for 6 months, he/she is less likely to be sick - know_1: knowledge gateway 1; percentage of MRWA who state it is healthy for a woman to give only breast milk for the first 6 months - pn_1 : perceived norms gateway 1; percentage of MRWA who agree people in the community think it is healthy for a woman to give her baby only breast milk for the first 6 months
 
-- exposure to breastfeeding messages in the last 3 months: exp
-  -  exp: exposure to nutrition messages gateway; percentage of MWRA who had heard or seen a message related to breastfeeding or young child nutrition from the radio, health worker, or community event in the past 3 months
-  
-- gender decision-making: decision_combined
-   - decision_combined: Percentage of MRWA who responded that she OR her and her partner jointly make decisions for all three categories: household purchases, healthcare, and visiting relatives
-    
-  
-- womens group participation: wg
-  - Percentage of MRWA who belong to a women's community group
-  
-- gateway behaviors: antenatal 
-
+-   exposure to breastfeeding messages in the last 3 months: exp
+    -   exp: exposure to nutrition messages gateway; percentage of MWRA who had heard or seen a message related to breastfeeding or young child nutrition from the radio, health worker, or community event in the past 3 months
+-   gender decision-making: decision_combined
+    -   decision_combined: Percentage of MRWA who responded that she OR her and her partner jointly make decisions for all three categories: household purchases, healthcare, and visiting relatives
+-   womens group participation: wg
+    -   Percentage of MRWA who belong to a women's community group
+-   gateway behaviors: antenatal
 
 ```{r}
 model_1 <- glm( se_1 ~ know_1 + att_1 + pn_1 + exp + decision_combined + wg + received_antenatal_care, 
@@ -649,40 +610,22 @@ model_1
 tidy(model_1, conf.int = TRUE)
 
 ```
-fitted regression surface=
-logit$p_{i}$ = -0.9988 + 1.462$X_1$ - 0.03529$X_2$ -1.199$X_3$ + 1.866$X_4$ +0.1011$X_5$ + 0.2326$X_6$ +0.01295$X_7$
-X1: knowledge gateway 
-X2: Attitude gateway 
-X3: Perceived Normal Gateway 
-X4: Exposure 
-X5: Decision Combined - decisions for all three categories: household purchases, healthcare, and visiting relatives
-X6: Women's community group
-X7: antenatal care 
 
+fitted regression surface= logit$p_{i}$ = -0.9988 + 1.462$X_1$ - 0.03529$X_2$ -1.199$X_3$ + 1.866$X_4$ +0.1011$X_5$ + 0.2326$X_6$ +0.01295$X_7$ X1: knowledge gateway X2: Attitude gateway X3: Perceived Normal Gateway X4: Exposure X5: Decision Combined - decisions for all three categories: household purchases, healthcare, and visiting relatives X6: Women's community group X7: antenatal care
 
 ### Model 2
-Variables Model 2: 
-- Gateway factors: 
-- breastfeeding behavioral determinants: att_1, know_1, pn_1
-  - att_1: attitude gateway 1; percentage of MWRA who agree if a baby is exclusively breastfed for 6 months, he/she is less likely to be sick
-  - know_1: knowledge gateway 1; percentage of MRWA who state it is healthy for a woman to give only breast milk for the first 6 months
-  - pn_1 : perceived norms gateway 1; percentage of MRWA who agree people in the community think it is healthy for a woman to give her baby only breast milk for the first 6 months
 
+Variables Model 2: - Gateway factors: - breastfeeding behavioral determinants: att_1, know_1, pn_1 - att_1: attitude gateway 1; percentage of MWRA who agree if a baby is exclusively breastfed for 6 months, he/she is less likely to be sick - know_1: knowledge gateway 1; percentage of MRWA who state it is healthy for a woman to give only breast milk for the first 6 months - pn_1 : perceived norms gateway 1; percentage of MRWA who agree people in the community think it is healthy for a woman to give her baby only breast milk for the first 6 months
 
-- exposure to breastfeeding messages in the last 3 months: exp
-  -  exp: exposure to nutrition messages gateway; percentage of MWRA who had heard or seen a message related to breastfeeding or young child nutrition from the radio, health worker, or community event in the past 3 months
-  
-- gender decision-making: decision_combined
-   - decision_combined: Percentage of MRWA who responded that she OR her and her partner jointly make decisions for all three categories: household purchases, healthcare, and visiting relatives
-      -binary variable
-        -  1 = responded either decides herself or jointly with her partner on all three decision categories, 0 = otherwise
-  
-- womens group participation: wg
-  - Percentage of MRWA who belong to a women's community group
-  
-- gateway behaviors: facility delivery  
-  - fac_delivery: percentage of MWRA who have given birth in the years preceding the survey who delivered in a facility for their last birth
-
+-   exposure to breastfeeding messages in the last 3 months: exp
+    -   exp: exposure to nutrition messages gateway; percentage of MWRA who had heard or seen a message related to breastfeeding or young child nutrition from the radio, health worker, or community event in the past 3 months
+-   gender decision-making: decision_combined
+    -   decision_combined: Percentage of MRWA who responded that she OR her and her partner jointly make decisions for all three categories: household purchases, healthcare, and visiting relatives -binary variable
+        -   1 = responded either decides herself or jointly with her partner on all three decision categories, 0 = otherwise
+-   womens group participation: wg
+    -   Percentage of MRWA who belong to a women's community group
+-   gateway behaviors: facility delivery
+    -   fac_delivery: percentage of MWRA who have given birth in the years preceding the survey who delivered in a facility for their last birth
 
 ```{r}
 model_2 <- glm(se_1 ~ know_1 + att_1 + pn_1  + exp + decision_combined + wg + fac_delivery, 
@@ -691,53 +634,29 @@ model_2 <- glm(se_1 ~ know_1 + att_1 + pn_1  + exp + decision_combined + wg + fa
 
 tidy(model_2, conf.int = TRUE)
 ```
-logit$p_{i}$ = -2.104 + 1.512$X_1$ + 0.1733$X_2$ -1.065$X_3$ + 1.681$X_4$ +0.1139$X_5$ + 0.3802$X_6$ +1.403$X_7$
-X1: knowledge gateway 
-X2: Attitude gateway 
-X3: Perceived Normal Gateway 
-X4: Exposure 
-X5: Decision Combined - decisions for all three categories: household purchases, healthcare, and visiting relatives
-X6: Women's community group
-X7: facility delivery
 
+logit$p_{i}$ = -2.104 + 1.512$X_1$ + 0.1733$X_2$ -1.065$X_3$ + 1.681$X_4$ +0.1139$X_5$ + 0.3802$X_6$ +1.403$X_7$ X1: knowledge gateway X2: Attitude gateway X3: Perceived Normal Gateway X4: Exposure X5: Decision Combined - decisions for all three categories: household purchases, healthcare, and visiting relatives X6: Women's community group X7: facility delivery
 
 ### Model 3
-Variables Model 3: 
-- Gateway factors: 
-- breastfeeding behavioral determinants: att_1, know_1, pn_1
-  - att_1: attitude gateway 1; percentage of MWRA who agree if a baby is exclusively breastfed for 6 months, he/she is less likely to be sick
-  - know_1: knowledge gateway 1; percentage of MRWA who state it is healthy for a woman to give only breast milk for the first 6 months
-  - pn_1 : perceived norms gateway 1; percentage of MRWA who agree people in the community think it is healthy for a woman to give her baby only breast milk for the first 6 months
 
+Variables Model 3: - Gateway factors: - breastfeeding behavioral determinants: att_1, know_1, pn_1 - att_1: attitude gateway 1; percentage of MWRA who agree if a baby is exclusively breastfed for 6 months, he/she is less likely to be sick - know_1: knowledge gateway 1; percentage of MRWA who state it is healthy for a woman to give only breast milk for the first 6 months - pn_1 : perceived norms gateway 1; percentage of MRWA who agree people in the community think it is healthy for a woman to give her baby only breast milk for the first 6 months
 
-- exposure to breastfeeding messages in the last 3 months: exp
-  -  exp: exposure to nutrition messages gateway; percentage of MWRA who had heard or seen a message related to breastfeeding or young child nutrition from the radio, health worker, or community event in the past 3 months
-  
-- gender decision-making: decision_combined
-   - decision_combined: Percentage of MRWA who responded that she OR her and her partner jointly make decisions for all three categories: household purchases, healthcare, and visiting relatives
-    
-  
-- womens group participation: wg
-  - Percentage of MRWA who belong to a women's community group
-- gateway behaviors: nutrition  
-
+-   exposure to breastfeeding messages in the last 3 months: exp
+    -   exp: exposure to nutrition messages gateway; percentage of MWRA who had heard or seen a message related to breastfeeding or young child nutrition from the radio, health worker, or community event in the past 3 months
+-   gender decision-making: decision_combined
+    -   decision_combined: Percentage of MRWA who responded that she OR her and her partner jointly make decisions for all three categories: household purchases, healthcare, and visiting relatives
+-   womens group participation: wg
+    -   Percentage of MRWA who belong to a women's community group
+-   gateway behaviors: nutrition
 
 ```{r}
-model3 <- glm(se_1 ~ know_1 + att_1  + pn_1 + exp + decision_combined + wg + nutrition,  
+model_3 <- glm(se_1 ~ know_1 + att_1  + pn_1 + exp + decision_combined + wg + nutrition,  
               family = binomial(link = "logit"), 
               data = niger)
-tidy(model3, conf.int = TRUE)
+tidy(model_3, conf.int = TRUE)
 ```
-logit$p_{i}$ = -0.967 + 1.471$X_1$ + -0.04103$X_2$ -1.205$X_3$ + 1.853$X_4$ +0.1002$X_5$ + 0.2391$X_6$ -0.00149$X_7$
-X1: knowledge gateway 
-X2: Attitude gateway 
-X3: Perceived Normal Gateway 
-X4: Exposure 
-X5: Decision Combined - decisions for all three categories: household purchases, healthcare, and visiting relatives
-X6: Women's community group
-X7: Communication about nutrition 
 
-
+logit$p_{i}$ = -0.967 + 1.471$X_1$ + -0.04103$X_2$ -1.205$X_3$ + 1.853$X_4$ +0.1002$X_5$ + 0.2391$X_6$ -0.00149$X_7$ X1: knowledge gateway X2: Attitude gateway X3: Perceived Normal Gateway X4: Exposure X5: Decision Combined - decisions for all three categories: household purchases, healthcare, and visiting relatives X6: Women's community group X7: Communication about nutrition
 
 # Were we able to replicate the results?
 
