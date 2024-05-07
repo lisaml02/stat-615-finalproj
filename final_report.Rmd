@@ -298,10 +298,89 @@ check assumptions for logistic regression model
 ## Early Initiation of Breastfeeding
 
 ### Model 1:
+```{r assumptions eib 1}
+# fitting a more complicated model
+niger1 <- mutate(niger, know_1_2 = (know_1^2))
+eib_1_comp <- glm(se_1 ~ know_1 + att_1 + pn_1 + exp + decision_combined + wg + received_antenatal_care + know_1 * received_antenatal_care + know_1_2 * received_antenatal_care,
+                 data = niger1, 
+                 family = binomial(link = "logit"))
+
+anova(glm_eib_1, eib_1_comp, test = "LRT")
+
+#fitting the model with cut explanatory variables; cut know_1 
+
+eib1_cut <- glm(se_1 ~ att_1 + pn_1 + exp + decision_combined + wg + received_antenatal_care, 
+                data = niger, 
+                family = binomial(link = "logit"))
+
+anova(eib1_cut, glm_eib_1, test = "LRT")
+
+hltest(glm_eib_1)
+aeib1 <- augment(glm_eib_1)
+
+ggplot(data = aeib1, mapping = aes(x = .fitted, y = .std.resid)) +
+  geom_point() +
+  geom_hline(yintercept = 0) +
+  geom_smooth(method = "loess", formula = y ~x)
+
+```
 
 ### Model 2:
+```{r assumptions eib 2}
+# fitting a more complicated model
+niger1 <- mutate(niger, know_1_2 = (know_1^2))
+eib_2_comp <- glm(se_1 ~ know_1 + att_1 + pn_1 + exp + decision_combined + wg + fac_delivery + know_1 * fac_delivery + know_1_2 * fac_delivery,
+                  data = niger1, 
+                  family = binomial(link = "logit"))
+
+anova(glm_eib_2, eib_2_comp, test = "LRT")
+
+#fitting the model with cut explanatory variables; cut know_1 
+
+eib2_cut <- glm(se_1 ~ att_1 + pn_1 + exp + decision_combined + wg + fac_delivery, 
+                data = niger, 
+                family = binomial(link = "logit"))
+
+anova(eib2_cut, glm_eib_2, test = "LRT")
+
+hltest(glm_eib_2)
+aeib2 <- augment(glm_eib_2)
+
+ggplot(data = aeib2, mapping = aes(x = .fitted, y = .std.resid)) +
+  geom_point() +
+  geom_hline(yintercept = 0) +
+  geom_smooth(method = "loess", formula = y ~x)
+
+```
 
 ### Model 3:
+```{r assumptions eib 3}
+# fitting a more complicated model
+niger1 <- mutate(niger, know_1_2 = (know_1^2))
+eib_3_comp <- glm(se_1 ~ know_1 + att_1 + pn_1 + exp + decision_combined + wg + nutrition + know_1 * nutrition + know_1_2 * nutrition,
+                  data = niger1, 
+                  family = binomial(link = "logit"))
+
+anova(glm_eib_3, eib_3_comp, test = "LRT")
+
+#fitting the model with cut explanatory variables; cut know_1 
+
+eib3_cut <- glm(se_1 ~ att_1 + pn_1 + exp + decision_combined + wg + nutrition, 
+                data = niger, 
+                family = binomial(link = "logit"))
+
+anova(eib3_cut, glm_eib_3, test = "LRT")
+
+hltest(glm_eib_3)
+aeib3 <- augment(glm_eib_3)
+
+ggplot(data = aeib3, mapping = aes(x = .fitted, y = .std.resid)) +
+  geom_point() +
+  geom_hline(yintercept = 0) +
+  geom_smooth(method = "loess", formula = y ~x)
+
+```
+
 
 ## Exclusive Initiation of Breastfeeding
 
