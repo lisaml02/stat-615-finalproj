@@ -489,10 +489,89 @@ When compared to the more complicated model, there is weak/moderate evidence of 
 ## Minimum Dietary Diversity
 
 ### Model 1:
+```{r assumptions mdd 1}
+# fitting a more complicated model
+niger2 <- mutate(niger, know_2_2 = (know_2^2))
+mdd1_comp <- glm(know_3 ~ know_2 + know_2_2 + att_3 + se_3 + pn_3 + exp + decision_combined + wg + received_antenatal_care + know_2 * received_antenatal_care + know_2_2 * received_antenatal_care,
+                 data = niger2, 
+                 family = binomial(link = "logit"))
+
+anova(glm_mdd_1, mdd1_comp, test = "LRT")
+
+#fitting a model with cut explanatory variables; cut know_2 
+
+mdd1_cut <- glm(know_3 ~ att_3 + se_3 + pn_3 + exp + decision_combined + wg + received_antenatal_care, 
+                 data = niger, 
+                 family = binomial(link = "logit"))
+
+anova(mdd1_cut, glm_mdd_1, test = "LRT")
+```
+```{r mdd 1 nonparametric smoother}
+hltest(glm_mdd_1)
+amdd1 <- augment(glm_mdd_1)
+
+ggplot(data = amdd1, mapping = aes(x = .fitted, y = .std.resid)) +
+  geom_point() +
+  geom_hline(yintercept = 0) +
+  geom_smooth(method = "loess", formula = y ~x)
+```
 
 ### Model 2:
+```{r assumptions mdd 2}
+# fitting a more complicated model
+niger2 <- mutate(niger, know_2_2 = (know_2^2))
+mdd2_comp <- glm(know_3 ~ know_2 + know_2_2 + att_3 + se_3 + pn_3 + exp + decision_combined + wg + fac_delivery + know_2 * fac_delivery + know_2_2 * fac_delivery,
+                 data = niger2, 
+                 family = binomial(link = "logit"))
+
+anova(glm_mdd_2, mdd2_comp, test = "LRT")
+
+#fitting a model with cut explanatory variables; cut know_2 
+
+mdd2_cut <- glm(know_3 ~ att_3 + se_3 + pn_3 + exp + decision_combined + wg + fac_delivery, 
+                 data = niger, 
+                 family = binomial(link = "logit"))
+
+anova(mdd2_cut, glm_mdd_2, test = "LRT")
+```
+```{r mdd 2 nonparametric smoother}
+hltest(glm_mdd_2)
+amdd2 <- augment(glm_mdd_2)
+
+ggplot(data = amdd2, mapping = aes(x = .fitted, y = .std.resid)) +
+  geom_point() +
+  geom_hline(yintercept = 0) +
+  geom_smooth(method = "loess", formula = y ~x)
+```
 
 ### Model 3:
+
+```{r assumptions mdd 3}
+# fitting a more complicated model
+niger2 <- mutate(niger, know_2_2 = (know_2^2))
+mdd3_comp <- glm(know_3 ~ know_2 + know_2_2 + att_3 + se_3 + pn_3 + exp + decision_combined + wg + nutrition + know_2 * nutrition + know_2_2 * nutrition,
+                 data = niger2, 
+                 family = binomial(link = "logit"))
+
+anova(glm_mdd_3, mdd3_comp, test = "LRT")
+
+#fitting a model with cut explanatory variables; cut know_2 
+
+mdd3_cut <- glm(know_3 ~ att_3 + se_3 + pn_3 + exp + decision_combined + wg + nutrition, 
+                 data = niger, 
+                 family = binomial(link = "logit"))
+
+anova(mdd3_cut, glm_mdd_3, test = "LRT")
+```
+```{r mdd 3 nonparametric smoother}
+hltest(glm_mdd_3)
+amdd3 <- augment(glm_mdd_3)
+
+ggplot(data = amdd3, mapping = aes(x = .fitted, y = .std.resid)) +
+  geom_point() +
+  geom_hline(yintercept = 0) +
+  geom_smooth(method = "loess", formula = y ~x)
+```
 
 # Interpretation of Results
 
