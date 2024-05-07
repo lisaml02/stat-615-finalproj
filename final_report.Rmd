@@ -157,7 +157,7 @@ odds_ratios_eib3
 ### Model 1:
 
 ```{r exib model 1}
-glm_exib_1 <- glm(se_1 ~ know_1 + att_1 + se_3 + pn_1 + exp + decision_combined + wg + received_antenatal_care + age + parity + any_edu + wealth, 
+glm_exib_1 <- glm(se_1 ~ know_1 + att_1 + se_3 + pn_1 + exp + decision_combined + wg + received_antenatal_care, # (removing control variables) + age + parity + any_edu + wealth, 
               data = niger, 
               family = binomial)
 
@@ -171,7 +171,7 @@ glm_exib_1
 ### Model 2:
 
 ```{r exib model 2}
-glm_exib_2 <- glm(se_1 ~ know_1 + att_1 + se_3 + pn_1 + exp + decision_combined + wg + fac_delivery + age + parity + any_edu + wealth, 
+glm_exib_2 <- glm(se_1 ~ know_1 + att_1 + se_3 + pn_1 + exp + decision_combined + wg + fac_delivery, # + age + parity + any_edu + wealth, 
               data = niger, 
               family = binomial)
 
@@ -185,7 +185,7 @@ glm_exib_2
 ### Model 3:
 
 ```{r exib model 3}
-glm_exib_3 <- glm(se_1 ~ know_1 + att_1 + se_3 + pn_1 + exp + decision_combined + wg + nutrition + age + parity + any_edu + wealth, 
+glm_exib_3 <- glm(se_1 ~ know_1 + att_1 + se_3 + pn_1 + exp + decision_combined + wg + nutrition, # + age + parity + any_edu + wealth, 
               data = niger, 
               family = binomial)
 
@@ -248,7 +248,7 @@ odds_ratios_mmf3
 ### Model 1:
 
 ```{r mdd model 1}
-glm_mdd_1 <- glm(know_3 ~ know_2 + att_3 + se_3 + pn_3 + wg + decision_combined + exp + received_antenatal_care + age + parity + any_edu + wealth,
+glm_mdd_1 <- glm(know_3 ~ know_2 + att_3 + se_3 + pn_3 + wg + decision_combined + exp + received_antenatal_care, # + age + parity + any_edu + wealth,
                  data = niger, 
                  family = binomial)
 
@@ -263,7 +263,7 @@ odds_ratios_mdd1
 ### Model 2:
 
 ```{r mdd model 2}
-glm_mdd_2 <- glm(know_3 ~ know_2 + att_3 + se_3 + pn_3 + wg + decision_combined + exp + fac_delivery + age + parity + any_edu + wealth,
+glm_mdd_2 <- glm(know_3 ~ know_2 + att_3 + se_3 + pn_3 + wg + decision_combined + exp + fac_delivery, # + age + parity + any_edu + wealth,
                  data = niger, 
                  family = binomial)
 
@@ -279,7 +279,7 @@ odds_ratios_mdd2
 ### Model 3:
 
 ```{r mdd model 3}
-glm_mdd_3 <- glm(know_3 ~ know_2 + att_3 + se_3 + pn_3 + wg + decision_combined + exp + nutrition + age + parity + any_edu + wealth,
+glm_mdd_3 <- glm(know_3 ~ know_2 + att_3 + se_3 + pn_3 + wg + decision_combined + exp + nutrition, # + age + parity + any_edu + wealth,
                  data = niger, 
                  family = binomial)
 
