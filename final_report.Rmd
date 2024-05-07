@@ -313,7 +313,7 @@ exib1_comp <- glm(se_1 ~ know_1 + know_1_2 + att_1 + se_3 + pn_1 + exp + decisio
                  data = niger_exib_1, 
                  family = binomial(link = "logit"))
 
-#anova(glm_exib_1, exib1_comp, test = "LRT")
+anova(glm_exib_1, exib1_comp, test = "LRT")
 
 #fitting a model with cut explanatory variables; cut know_1
 
@@ -334,6 +334,33 @@ ggplot(data = aexib1, mapping = aes(x = .fitted, y = .std.resid)) +
 ```
 ### Model 2:
 
+```{r assumptions exib 2}
+# fitting a more complicated model
+niger_exib_1 <- mutate(niger, know_1_2 = (know_1^2))
+exib2_comp <- glm(se_1 ~ know_1 + know_1_2 + att_1 + se_3 + pn_1 + exp + decision_combined + wg + fac_delivery + know_1 * fac_delivery + know_1_2 * fac_delivery,
+                 data = niger_exib_1, 
+                 family = binomial(link = "logit"))
+
+anova(glm_exib_2, exib2_comp, test = "LRT")
+
+#fitting a model with cut explanatory variables; cut know_1
+
+exib2_cut <- glm(se_1 ~ att_1 + se_3 + pn_1 + exp + decision_combined + wg + received_antenatal_care, 
+                 data = niger, 
+                 family = binomial(link = "logit"))
+
+anova(exib2_cut, glm_exib_2, test = "LRT")
+```
+
+```{r exib 2 nonparametric smoother}
+hltest(glm_exib_2)
+aexib2 <- augment(glm_exib_2)
+
+ggplot(data = aexib2, mapping = aes(x = .fitted, y = .std.resid)) +
+  geom_point() +
+  geom_hline(yintercept = 0) +
+  geom_smooth(method = "loess", formula = y ~x)
+```
 ### Model 3:
 
 ## Minimum Meal Frequency
