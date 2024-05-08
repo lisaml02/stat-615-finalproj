@@ -164,8 +164,8 @@ glm_exib_1 <- glm(se_1 ~ know_1 + att_1 + se_3 + pn_1 + exp + decision_combined 
 tidy(glm_exib_1, conf.int = TRUE)
 
 # Odds Ratio
-glm_exib_1 <- exp(coef(glm_exib_1))
-glm_exib_1
+OR_glm_exib_1 <- exp(coef(glm_exib_1))
+OR_glm_exib_1
 ```
 
 ### Model 2:
@@ -178,8 +178,8 @@ glm_exib_2 <- glm(se_1 ~ know_1 + att_1 + se_3 + pn_1 + exp + decision_combined 
 tidy(glm_exib_2, conf.int = TRUE)
 
 # Odds Ratio
-glm_exib_2 <- exp(coef(glm_exib_2))
-glm_exib_2
+OR_glm_exib_2 <- exp(coef(glm_exib_2))
+OR_glm_exib_2
 ```
 
 ### Model 3:
@@ -192,8 +192,8 @@ glm_exib_3 <- glm(se_1 ~ know_1 + att_1 + se_3 + pn_1 + exp + decision_combined 
 tidy(glm_exib_3, conf.int = TRUE)
 
 # Odds Ratio
-glm_exib_3 <- exp(coef(glm_exib_3))
-glm_exib_3
+OR_glm_exib_3 <- exp(coef(glm_exib_3))
+OR_glm_exib_3
 ```
 
 ## Minimum Meal Frequency
