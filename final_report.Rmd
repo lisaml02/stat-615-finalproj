@@ -1201,6 +1201,8 @@ where $p_i$ percentage of MWRA who reported that the number of different types o
 mdd1_red <- glm(know_3 ~ 1, data = niger, family = binomial(link = "logit"))
 anova(mdd1_red, mdd1_cut, test = "LRT")
 ```
+there is statistically significant evidence to suggest that at least one of the predictors is associated with the percentage of MWRA who reported that the number of different types of food a child 6-23 months should eat a day is 4 or more(p-value < 0.001).
+
 ```{r partial associations mdd1}
 # testing for an association between know_2 and know_3
 mdd1_reda <- glm(know_3 ~ att_3 + se_3 + pn_3 + wg + decision_combined + exp + recieved_antenatal_care, data = niger, family = binomial(link = "logit"))
@@ -1259,6 +1261,8 @@ where $p_i$ percentage of MWRA who reported that the number of different types o
 mdd2_red <- glm(know_3 ~ 1, data = niger, family = binomial(link = "logit"))
 anova(mdd2_red, mdd2_cut, test = "LRT")
 ```
+there is statistically significant evidence to suggest that at least one of the predictors is associated with the percentage of MWRA who reported that the number of different types of food a child 6-23 months should eat a day is 4 or more(p-value < 0.001).
+
 ```{r partial associations mdd2}
 # testing for an association between know_2 and know_3
 mdd2_reda <- glm(know_3 ~ att_3 + se_3 + pn_3 + wg + decision_combined + exp + fac_delivery, data = niger, family = binomial(link = "logit"))
@@ -1315,6 +1319,9 @@ where $p_i$ percentage of MWRA who reported that the number of different types o
 mdd3_red <- glm(know_3 ~ 1, data = niger, family = binomial(link = "logit"))
 anova(mdd3_red, mdd3_cut, test = "LRT")
 ```
+there is statistically significant evidence to suggest that at least one of the predictors is associated with the percentage of MWRA who reported that the number of different types of food a child 6-23 months should eat a day is 4 or more(p-value < 0.001).
+
+
 ```{r partial associations mdd3}
 # testing for an association between know_2 and know_3
 mdd3_reda <- glm(know_3 ~ att_3 + se_3 + pn_3 + wg + decision_combined + exp + nutrition, data = niger, family = binomial(link = "logit"))
