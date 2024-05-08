@@ -1299,6 +1299,14 @@ tidy(mdd3_cut, conf.int = TRUE)
 odds_ratios_mdd3_cut <- exp(coef(mdd3_cut))
 odds_ratios_mdd3_cut
 ```
+Fitted regression surface:
+
+logit($p_i$) = -3.93 + 1.31$X_1$ + 1.50$X_2$ + 2.50$X_3$ + 0.122$X_4$ + 0.478$X_5$ + 0.714$X_6$ - 0.0182$X_7$ 
+
+where $p_i$ is the percentage of MWRA who reported a child 6-23 months should eat 4 or more meals each day, $X_1$ is the percentage of MWRA who agree children who eat a variety of foods are less likely to get sick, $X_2$ percentage of MRWA who say giving a child a minimum of 4 or more different types of food a day is not difficult at all, $X_3$ is the percentage of MRWA who believes number of different types of food people in the community think a child 6-23 months should eat a day is 4 or more; 1 = those who believe the number of different types of food people in the community think a child 6-23 months should eat a day is 4 or more, 0 = otherwise
+, $X_4$ is an indicator for the percentage of MWRA who had heard or seen a message related to breastfeeding or young child nutrition, $X_5$ is an indicator for Percentage of MRWA who responded that she OR her and her partner jointly make decisions for all three categories: household purchases, healthcare, and visiting relatives; 1 = responded either decides herself or jointly with her partner on all three decision categories, 0 = otherwise, $X_6$ is the Percentage of MRWA who belong to a women's community group, and $X_7$ percentage of MWRA who spoke with 1) husband/partner, 2) family member, 3) health provider, 4) nobody about child's nutrition.
+
+
 ```{r overall associations mdd3}
 mdd3_red <- glm(know_3 ~ 1, data = niger, family = binomial(link = "logit"))
 anova(mdd3_red, mdd3_cut, test = "LRT")
