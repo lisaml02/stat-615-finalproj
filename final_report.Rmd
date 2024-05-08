@@ -672,6 +672,15 @@ Interpretation of coefficients, measures of uncertainty, etc,
 ## Exclusive Initiation of Breastfeeding
 
 ### Model 1:
+```{r fitting the updated exib model 1}
+tidy(exib1_cut, conf.int = TRUE)
+
+odds_ratios_exib1_cut <- exp(coef(exib1_cut))
+odds_ratios_exib1_cut
+```
+Fitted regression surface:
+
+logit($p_i$) = -0.676 + 0.407$X_1$ + 2.067$X_2$ - 0.723$X_3$ + 1.582$X_4$ + 0.020$X_5$ + 0.415$X_6$ - 0.147$X_7$
 
 ### Model 2:
 
