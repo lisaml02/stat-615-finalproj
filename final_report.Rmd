@@ -689,6 +689,37 @@ anova(exib1_red, exib1_cut, test = "LRT")
 ```
 there is statistically significant evidence that at least one of the predictors is associated with the percentage of MWRA who agree giving only breast milk to the baby for the first 6 months is not difficult at all.
 
+```{r exib partial associations}
+# testing for an association between att_1 and se_1
+exib1_reds <- glm(se_1 ~  se_3 + pn_1 + exp + decision_combined + wg + received_antenatal_care, data = niger, family = binomial(link = "logit"))
+anova(exib1_reds, exib1_cut, test = "LRT")
+
+# testing for an association between se_3 and se_1
+exib1_redp <- glm(se_1 ~  att_1 + pn_1 + exp + decision_combined + wg + received_antenatal_care, data = niger, family = binomial(link = "logit"))
+anova(exib1_redp, exib1_cut, test = "LRT")
+
+# testing for an association between exp and se_1
+exib1_rede <- glm(se_1 ~ att_1 + se_3 + pn_1 + decision_combined + wg + received_antenatal_care, data = niger, family = binomial(link = "logit"))
+anova(exib1_rede, exib1_cut, test = "LRT")
+
+# testing for an association between pn_1 and se_1
+exib1_redd <- glm(se_1 ~ att_1 + se_3 + exp + decision_combined + wg + received_antenatal_care, data = niger, family = binomial(link = "logit"))
+anova(exib1_redd, exib1_cut, test = "LRT")
+
+# testing for an association between wg and se_1
+
+exib1_redw <- glm(se_1 ~ att_1 + se_3 + pn_1 + exp + decision_combined + received_antenatal_care, data = niger, family = binomial(link = "logit"))
+anova(exib1_redw, exib1_cut, test = "LRT")
+
+# testing for an association between received_antenatal_care and se_1
+exib1_reda <- glm(se_1 ~ att_1 + se_3 + pn_1 + exp + decision_combined + wg, data = niger, family = binomial(link = "logit"))
+anova(exib1_reda, exib1_cut, test = "LRT")
+
+# testing for an association between decision_combined and se_1
+exib1_redq <- glm(se_1 ~ att_1 + se_3 + pn_1 + exp + wg + received_antenatal_care, data = niger, family = binomial(link = "logit"))
+anova(exib1_redq, exib1_cut, test = "LRT")
+```
+
 
 ### Model 2:
 
