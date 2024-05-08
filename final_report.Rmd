@@ -732,6 +732,44 @@ odds_ratios_exib2_cut
 logit($p_i$) = -1.549 + 0.518$X_1$ + 1.706$X_2$ - 0.574$X_3$ + 1.445$X_4$ + 0.036$X_5$ + 0.508$X_6$ + 1.084$X_7$
 where $pi_i$ is the percentage of MWRA who agree giving only breast milk to the baby for the first 6 months is not difficult at all,  $X_1$ is the percentage of MWRA who agree if a baby is exclusively breastfed for 6 months, he/she is less likely to be sick, $X_2$ is the percentage of MRWA who say giving a child a minimum of 4 or more different types of food a day is not difficult at all, $X_3$ is the percentage of MRWA who agree people in the community think it is healthy for a woman to give her baby only breast milk for the first 6 months $X_4$ is the percentage of MWRA who had heard or seen a message related to breastfeeding or young child nutrition from the radio, health worker, or community event in the past 3 months, $X_5$ is the Percentage of MRWA who responded that she OR her and her partner jointly make decisions for all three categories: household purchases, healthcare, and visiting relatives, $X_6$ is the Percentage of MRWA who belong to a women's community group, and $X_7$ is the percentage of MRWA who have given birth in the years preceding the survey who delivered in a facility for their last birth.
 
+```{r exib 2 associations}
+exib2_red <- glm(se_1 ~ 1, data = niger, family = binomial(link = "logit"))
+anova(exib2_red, exib2_cut, test = "LRT")
+```
+there is statistically significant evidence that at least one of the predictors is associated with the percentage of MWRA who agree giving only breast milk to the baby for the first 6 months is not difficult at all.
+
+```{r exib partial associations}
+# testing for an association between att_1 and se_1
+exib2_reds <- glm(se_1 ~  se_3 + pn_1 + exp + decision_combined + wg + fac_delivery, data = niger, family = binomial(link = "logit"))
+anova(exib2_reds, exib2_cut, test = "LRT")
+
+# testing for an association between se_3 and se_1
+exib2_redp <- glm(se_1 ~  att_1 + pn_1 + exp + decision_combined + wg + fac_delivery, data = niger, family = binomial(link = "logit"))
+anova(exib2_redp, exib2_cut, test = "LRT")
+
+# testing for an association between exp and se_1
+exib2_rede <- glm(se_1 ~ att_1 + se_3 + pn_1 + decision_combined + wg + fac_delivery, data = niger, family = binomial(link = "logit"))
+anova(exib2_rede, exib2_cut, test = "LRT")
+
+# testing for an association between pn_1 and se_1
+exib2_redd <- glm(se_1 ~ att_1 + se_3 + exp + decision_combined + wg + fac_delivery, data = niger, family = binomial(link = "logit"))
+anova(exib2_redd, exib2_cut, test = "LRT")
+
+# testing for an association between wg and se_1
+
+exib2_redw <- glm(se_1 ~ att_1 + se_3 + pn_1 + exp + decision_combined + fac_delivery, data = niger, family = binomial(link = "logit"))
+anova(exib2_redw, exib2_cut, test = "LRT")
+
+# testing for an association between fac_delivery and se_1
+exib2_reda <- glm(se_1 ~ att_1 + se_3 + pn_1 + exp + decision_combined + wg, data = niger, family = binomial(link = "logit"))
+anova(exib2_reda, exib2_cut, test = "LRT")
+
+# testing for an association between decision_combined and se_1
+exib2_redq <- glm(se_1 ~ att_1 + se_3 + pn_1 + exp + wg + fac_delivery, data = niger, family = binomial(link = "logit"))
+anova(exib2_redq, exib2_cut, test = "LRT")
+```
+
+there is very strong evidence that indicates that se_1 is associated with se_3,  exp,  pn_1, wg, and fac_delivery with extremely low p-values close to 0. There is relatively strong evidence of an association between se_1 and att_1 with a p-value of 0.01993. There is weak evidence that se_1 and decision_combined are associated with a p-value of 0.7921.
 
 ### Model 3:
 
