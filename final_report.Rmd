@@ -690,6 +690,9 @@ Interpretation of regression coefficients/odds:
 
 -   $\beta_6$: The odds of MWRA who agree giving only breast milk to the baby for the first 6 months is not difficult at all is about 0.186 times less for those that have received antenatal care adjusting for the other predictors in the model. The p-value of 0.332 suggests that this decrease is not statistically significant, implying that receiving antenatal care, in this study, does not have a significant impact on early initiation of breastfeeding.
 
+$H_0$: $\beta_1$ = $\beta_2$ = $\beta_3$ = $\beta_4$ = $\beta_5$ = $\beta_6$ = 0 (the predictors are not associated with the outcome variable) $\rightarrow$ reduced model: logit($p_i$) = $\beta_0$
+$H_A$: at least one of the regression coefficients is non-zero (at least one of the predictors is associated with the outcome variable) $\rightarrow$ full model: logit($p_i$) = $\beta_0$ + $\beta_1X_{i1}$ + $\beta_2X_{i2}$ + $\beta_3X_{i3}$ + $\beta_4X_{i4}$ + $\beta_5X_{i5}$ + $\beta_6X_{i6}$ 
+
 ```{r eib partial associations}
 # testing for an association between se_1 and know_1
 eib1_redk <- glm(se_1 ~ att_1 + pn_1 + exp + decision_combined + wg + received_antenatal_care,data = niger, family = binomial(link = "logit"))
@@ -750,6 +753,8 @@ Interpretation of regression coefficients/odds:
 
 -   $\beta_6$: The odds of MWRA who agree giving only breast milk to the baby for the first 6 months is not difficult at all is about 1.33 times higher for those that have delivered in a facility adjusting for the other predictors in the model. The p-value of 2.39e-24  suggests that this increase is highly statistically significant, indicating that facility deliveries are a strong predictor of the outcome.
 
+$H_0$: $\beta_1$ = $\beta_2$ = $\beta_3$ = $\beta_4$ = $\beta_5$ = $\beta_6$ = 0 (the predictors are not associated with the outcome variable) $\rightarrow$ reduced model: logit($p_i$) = $\beta_0$
+$H_A$: at least one of the regression coefficients is non-zero (at least one of the predictors is associated with the outcome variable) $\rightarrow$ full model: logit($p_i$) = $\beta_0$ + $\beta_1X_{i1}$ + $\beta_2X_{i2}$ + $\beta_3X_{i3}$ + $\beta_4X_{i4}$ + $\beta_5X_{i5}$ + $\beta_6X_{i6}$ 
 
 ```{r eib partial associations}
 # testing for an association between se_1 and know_1
@@ -808,6 +813,8 @@ Interpretation of regression coefficients/odds:
 
 -   $\beta_6$: The odds of MWRA who agree giving only breast milk to the baby for the first 6 months is not difficult at all is about 0.000408 times less for those that have delivered in a facility adjusting for the other predictors in the model. The p-value of 0.863, suggesting that this variable's impact is not statistically significant.
 
+$H_0$: $\beta_1$ = $\beta_2$ = $\beta_3$ = $\beta_4$ = $\beta_5$ = $\beta_6$ = 0 (the predictors are not associated with the outcome variable) $\rightarrow$ reduced model: logit($p_i$) = $\beta_0$
+$H_A$: at least one of the regression coefficients is non-zero (at least one of the predictors is associated with the outcome variable) $\rightarrow$ full model: logit($p_i$) = $\beta_0$ + $\beta_1X_{i1}$ + $\beta_2X_{i2}$ + $\beta_3X_{i3}$ + $\beta_4X_{i4}$ + $\beta_5X_{i5}$ + $\beta_6X_{i6}$ 
 
 ```{r eib partial associations}
 # testing for an association between se_1 and know_1
@@ -838,6 +845,7 @@ anova(eib3_redw, glm_eib_3, test = "LRT")
 eib3_redr <- glm(se_1 ~ know_1 + att_1 + pn_1 + exp + wg + decision_combined,data = niger, family = binomial(link = "logit"))
 anova(eib3_redr, glm_eib_3, test = "LRT")
 ```
+We have very strong evidence to suggest an association between se_1 and exp  (p-value \< 0.001), se_1 and wg (p-value 0.006149), se_1 and pn_1(p-value 8.325e-08 ), se_1 and know_1(p-value 6.832e-12 ) 
 
 ## Exclusive Initiation of Breastfeeding
 
@@ -1822,12 +1830,13 @@ there is very strong evidence that indicates know_3 is associated with know_2, s
 
 
 # Critiques/Expansion of Analysis
+A fundamental component of any empirical research is the clear definition and accessible documentation of variables used in the analysis. This critique highlights transparency and measurement concerns in a Niger study.Firstly, the lack of a clear variable key linking survey responses to the analysis creates a barrier to understanding how data was translated into quantifiable variables. This omission significantly undermines the ability to understand how survey responses were translated into quantifiable data. Peer reviews and fellow researchers are unable to trace how data inputs are derived from the survey questions, complicating the interpretation of the results. Secondly, the study's reliance on self-reported data introduces potential biases. Participants might answer based on social desirability or be influenced by a spouse's presence, leading to skewed results.  Finally, the critique identifies the missing information on how missing data was handled. Depending on the approach used, missing data can introduce further biases or mask underlying patterns. To improve the study, researchers should provide a detailed variable key, acknowledge and address potential biases, and explain their approach to handling missing data. These steps would enhance transparency, strengthen the analysis, and allow for more reliable interpretation of the study's findings.
 
-Professor is most interested in this, so we need to spend some time on this one. He said in our feedback that our critiques should be pretty obvious (ie. the lack of meaningful descriptions of the data and the struggles that ended up creating)
 
 # Findings and Conclusion
 
-spend very little time on this
+The shortcomings identified in the survey clarity, variable documentation, and data collection approach raise substantial concerns about the study’s reliability and validity. To enhance the credibility of future research, it is imperative to address these issues by providing comprehensive variable keys and metadata. As expected, our findings do not match those of the study as we used different dependent variables. 
+
 
 ## note: 4 pages double spaced, 12 pt font MAX (not including graphics/tables/code)
 
