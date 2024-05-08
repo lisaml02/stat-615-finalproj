@@ -1231,6 +1231,29 @@ exp(-0.109)
 exp(0.544)
 
 ```
+Intercept: When all predictors are at their reference level, the odds of a MWRA reporting that a child 6-23 months should eat 4 or more different types of food a day is approximately 0.02 times (between 0.009 and 0.05 times more in 95% of repeated samples) more than when all predictors are at their alternative levels.
+
+$\beta_1$: The odds of a MWRA reporting that a child 6-23 months should eat 4 or more different types of food a day is about 3.85 times more (between 1.9 and 8.2 times more in 95% of repeated samples) for MWRA who agree that children who eat a variety of foods are less likely to get sick compared to MWRA who do not agree, adjusting for the other predictors in the model.
+
+
+$\beta_2$: The odds of a MWRA reporting that a child 6-23 months should eat 4 or more different types of food a day is about 4.55 times more (between 3.1 and 6.8  times more in 95% of repeated samples) for MWRA who say giving a child a minimum of 4 or more different types of food a day is not difficult at all compared to MWRA who find it difficult, adjusting for the other predictors in the model.
+
+$\beta_3$: The odds of a MWRA reporting that a child 6-23 months should eat 4 or more different types of food a day is about 11.36 times more (between 8.3 and 15.6 times more in 95% of repeated samples) for MWRA who believe the number of different types of food people in the community think a child 6-23 months should eat a day is 4 or more compared to MWRA who believe otherwise, adjusting for the other predictors in the model.
+
+$\beta_4$: The odds of a MWRA reporting that a child 6-23 months should eat 4 or more different types of food a day is about 1.24 times more (between 0.889 and 1.72 times more in 95% of repeated samples) for MWRA who had heard or seen a message related to breastfeeding or young child nutrition compared to MWRA who were not exposed to these messages, adjusting for the other predictors in the model.
+
+
+$\beta_5$: The odds of a MWRA reporting that a child 6-23 months should eat 4 or more different types of food a day is about 1.55 times more (between 1.1 and 2.3 times more in 95% of repeated samples) for MWRA who responded that she OR her and her partner jointly make decisions for all three categories: household purchases, healthcare, and visiting relatives compared to MWRA whose husband exclusively makes such decisions, adjusting for the other predictors in the model.
+
+$\beta_6$: The odds of a MWRA reporting that a child 6-23 months should eat 4 or more different types of food a day is about 1.98 times more (between 1.4 and 2.7 times more in 95% of repeated samples) for MWRA who belong to a women's community group compared to MWRA who do not belong to a women's group, adjusting for the other predictors in the model.
+
+$\beta_7$: The odds of a MWRA reporting that a child 6-23 months should eat 4 or more different types of food a day is about 0.691 times (between 0.433 and 1.118 times more in 95% of repeated samples) for MWRA who have given birth in the last 5 years and received antenatal care for their last pregnancy compared to MWRA who have not received antenatal care, adjusting for the other predictors in the model.
+
+Testing for associations:
+
+$H_0$: $\beta_1$ = $\beta_2$ = $\beta_3$ = $\beta_4$ = $\beta_5$ = $\beta_6$ = $\beta_7$ = 0 (the predictors are not associated with the outcome variable) $\rightarrow$ reduced model: logit($p_i$) = $\beta_0$
+$H_A$: at least one of the regression coefficients is non-zero (at least one of the predictors is associated with the outcome variable) $\rightarrow$ full model: logit($p_i$) = $\beta_0$ + $\beta_1X_{i1}$ + $\beta_2X_{i2}$ + $\beta_3X_{i3}$ + $\beta_4X_{i4}$ + $\beta_5X_{i5}$ + $\beta_6X_{i6}$ + $\beta_7$$X_{i7}$
+We have very strong evidence to suggest an association between att_3 and mdd1 (p-value < 0.001), se_3 and mdd1 (p-value < 0.001), pn_3 and mdd1 (p-value < 0.001), decision_combined and mdd1 (p-value < 0.001), moderately strong evidence to suggest an association between wg and mdd1 (p-value = 0.049) and weak evidence to suggest an association between exp and mdd1 (p-value = 0.234).
 
 ```{r overall associations mdd1}
 mdd1_red <- glm(know_3 ~ 1, data = niger, family = binomial(link = "logit"))
