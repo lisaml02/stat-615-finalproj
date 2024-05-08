@@ -682,7 +682,18 @@ Fitted regression surface:
 
 logit($p_i$) = -0.676 + 0.407$X_1$ + 2.067$X_2$ - 0.723$X_3$ + 1.582$X_4$ + 0.020$X_5$ + 0.415$X_6$ - 0.147$X_7$
 where $pi_i$ is the percentage of MWRA who agree giving only breast milk to the baby for the first 6 months is not difficult at all,  $X_1$ is the percentage of MWRA who agree if a baby is exclusively breastfed for 6 months, he/she is less likely to be sick, $X_2$ is the percentage of MRWA who say giving a child a minimum of 4 or more different types of food a day is not difficult at all, $X_3$ is the percentage of MRWA who agree people in the community think it is healthy for a woman to give her baby only breast milk for the first 6 months $X_4$ is the percentage of MWRA who had heard or seen a message related to breastfeeding or young child nutrition from the radio, health worker, or community event in the past 3 months, $X_5$ is the Percentage of MRWA who responded that she OR her and her partner jointly make decisions for all three categories: household purchases, healthcare, and visiting relatives, $X_6$ is the Percentage of MRWA who belong to a women's community group, and $X_7$ is the percentage of MRWA who have given birth in the last 5 years and received antenatal care for their last pregnancy.
+
 ### Model 2:
+
+```{r fitting the updated exib model 2}
+tidy(exib2_cut, conf.int = TRUE)
+
+odds_ratios_exib2_cut <- exp(coef(exib2_cut))
+odds_ratios_exib2_cut
+```
+logit($p_i$) = -1.549 + 0.518$X_1$ + 1.706$X_2$ - 0.574$X_3$ + 1.445$X_4$ + 0.036$X_5$ + 0.508$X_6$ + 1.084$X_7$
+where $pi_i$ is the percentage of MWRA who agree giving only breast milk to the baby for the first 6 months is not difficult at all,  $X_1$ is the percentage of MWRA who agree if a baby is exclusively breastfed for 6 months, he/she is less likely to be sick, $X_2$ is the percentage of MRWA who say giving a child a minimum of 4 or more different types of food a day is not difficult at all, $X_3$ is the percentage of MRWA who agree people in the community think it is healthy for a woman to give her baby only breast milk for the first 6 months $X_4$ is the percentage of MWRA who had heard or seen a message related to breastfeeding or young child nutrition from the radio, health worker, or community event in the past 3 months, $X_5$ is the Percentage of MRWA who responded that she OR her and her partner jointly make decisions for all three categories: household purchases, healthcare, and visiting relatives, $X_6$ is the Percentage of MRWA who belong to a women's community group, and $X_7$ is the percentage of MRWA who have given birth in the years preceding the survey who delivered in a facility for their last birth.
+
 
 ### Model 3:
 
