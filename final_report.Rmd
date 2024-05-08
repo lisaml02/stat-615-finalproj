@@ -426,7 +426,7 @@ anova(glm_exib_2, exib2_comp, test = "LRT")
 
 #fitting a model with cut explanatory variables; cut know_1
 
-exib2_cut <- glm(se_1 ~ att_1 + se_3 + pn_1 + exp + decision_combined + wg + received_antenatal_care, 
+exib2_cut <- glm(se_1 ~ att_1 + se_3 + pn_1 + exp + decision_combined + wg + fac_delivery, 
                  data = niger, 
                  family = binomial(link = "logit"))
 
@@ -457,7 +457,7 @@ anova(glm_exib_3, exib3_comp, test = "LRT")
 
 #fitting a model with cut explanatory variables; cut know_1
 
-exib3_cut <- glm(se_1 ~ att_1 + se_3 + pn_1 + exp + decision_combined + wg + received_antenatal_care, 
+exib3_cut <- glm(se_1 ~ att_1 + se_3 + pn_1 + exp + decision_combined + wg + nutrition, 
                  data = niger, 
                  family = binomial(link = "logit"))
 
