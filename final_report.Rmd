@@ -1240,7 +1240,40 @@ odds_ratios_mdd2_cut
 mdd2_red <- glm(know_3 ~ 1, data = niger, family = binomial(link = "logit"))
 anova(mdd2_red, mdd2_cut, test = "LRT")
 ```
+```{r partial associations mdd2}
+# testing for an association between know_2 and know_3
+mdd2_reda <- glm(know_3 ~ att_3 + se_3 + pn_3 + wg + decision_combined + exp + fac_delivery, data = niger, family = binomial(link = "logit"))
+anova(mdd2_reda, glm_mdd_2, test = "LRT")
 
+# testing for an association between att_3 and know_3
+mdd2_reds <- glm(know_3 ~ know_2 + se_3 + pn_3 + wg + decision_combined + exp + fac_delivery, data = niger, family = binomial(link = "logit"))
+anova(mdd2_reds, glm_mdd_2, test = "LRT")
+
+# testing for an association between se_3 and know_3
+mdd2_redw <- glm(know_3 ~ know_2 + att_3 + se_3 + pn_3 + wg + decision_combined + exp + fac_delivery data = niger, family = binomial(link = "logit"))
+anova(mdd2_redw, glm_mdd_2, test = "LRT")
+
+# testing for an association between pn_3 and know_3
+mdd2_redd <- glm(know_3 ~ know_2 + att_3 + se_3 + wg + decision_combined + exp + fac_delivery, data = niger, family = binomial(link = "logit"))
+anova(mdd2_redd, glm_mdd_2, test = "LRT")
+
+# testing for an association between wg and know_3
+mdd2_rede <- glm(know_3 ~ know_2 + att_3 + se_3 + pn_3 + decision_combined + exp + fac_delivery, data = niger, family = binomial(link = "logit"))
+anova(mdd2_rede, glm_mdd_2, test = "LRT")
+
+# testing for an association between decision_combined and know_3
+mdd2_redq <- glm(know_3 ~ know_2 + att_3 + se_3 + pn_3 + wg  + exp + fac_delivery, data = niger, family = binomial(link = "logit"))
+anova(mdd2_redq, glm_mdd_2, test = "LRT")
+
+# testing for an association between exp and know_3
+mdd2_redr <- glm(know_3 ~ know_2 + att_3 + se_3 + pn_3 + wg + decision_combined + fac_delivery, data = niger, family = binomial(link = "logit"))
+anova(mdd2_redr, glm_mdd_2, test = "LRT")
+
+# testing for an association between fac_delivery and know_3
+mdd2_redz <- glm(know_3 ~ know_2 + att_3 + se_3 + pn_3 + wg + decision_combined + exp, data = niger, family = binomial(link = "logit"))
+anova(mdd2_redz, glm_mdd_2, test = "LRT")
+
+```
 
 ### Model 3:
 ```{r fitting the updated mdd model 3}
