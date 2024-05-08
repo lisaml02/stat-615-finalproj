@@ -1235,6 +1235,8 @@ mdd1_redz <- glm(know_3 ~ know_2 + att_3 + se_3 + pn_3 + wg + decision_combined 
 anova(mdd1_redz, glm_mdd_1, test = "LRT")
 
 ```
+there is very strong evidence that indicates know_3 is associated with know_2, se_3, pn_3, and wg with p-values close to or equal to  0. There is moderately strong evidence that know_3 is associated with att_3 and exp with p-values of 0.02877 and 0.04736 respectively. There is moderate evidence that know_3 is associated with decision_combined and recieved_antenatal_care with p-values of 0.1503 and 0.3225 respectively.
+
 
 ### Model 2:
 
@@ -1291,6 +1293,8 @@ mdd2_redz <- glm(know_3 ~ know_2 + att_3 + se_3 + pn_3 + wg + decision_combined 
 anova(mdd2_redz, glm_mdd_2, test = "LRT")
 
 ```
+there’s moderately strong evidence that indicates know_3 is associated with att_3 , decision_combined,  exp, and fac_delivery with a p-value of 0.02602, 0.1015, 0.0735, and 0.1307 respectively. There is very  strong evidence that indicates know_3 is associated with know_2, pn_3,  and wg  with a p-value of almost 0. There is extremely strong evidence that indicates know_3 is associated with  se_3 with a p-value of 0. 
+
 
 ### Model 3:
 ```{r fitting the updated mdd model 3}
@@ -1344,6 +1348,10 @@ anova(mdd3_redr, glm_mdd_3, test = "LRT")
 mdd3_redz <- glm(know_3 ~ know_2 + att_3 + se_3 + pn_3 + wg + decision_combined + exp, data = niger, family = binomial(link = "logit"))
 anova(mdd3_redz, glm_mdd_3, test = "LRT")
 ```
+
+there is very strong evidence that indicates know_3 is associated with know_2, se_3, pn_3,  nutrition, and wg with p-values close to or equal to  0. There is relatively strong evidence that know_3 is associated with att_3 with a p-value of 0.05317. There is moderately strong evidence that know_3 is associated with decision_combined and exp with p-values of 0.1356 and 0.1775 respectively.
+
+
 
 # Critiques/Expansion of Analysis
 
