@@ -663,10 +663,181 @@ Interpretation of coefficients, measures of uncertainty, etc,
 ## Early Initiation of Breastfeeding
 
 ### Model 1:
+```{r fitting the updated mmf model 1}
+tidy(eib1_cut, conf.int = TRUE)
+
+odds_ratios_eib1_cut <- exp(coef(eib1_cut))
+odds_ratios_eib1_cut
+```
+Fitted regression surface:
+
+logit($p_i$) = -0.196 + 0.0532$X_1$ - 0.633$X_2$ + 1.76$X_3$ + 0.0209$X_4$ + 0.356$X_5$ - 0.186$X_6$
+where $p_i$ is the estimated likelihood of an MWRA reporting that they agree giving only breast milk to the baby for the first 6 months is not difficult at all, $X_1$ is an indicator for MRWA who agree if a baby is exclusively breastfed for 6 months, he/she is less likely to be sick, $X_2$ is an indicator for MWRA who agree people in the community think it is healthy for a woman to give her baby only breast milk for the first 6 months, $X_3$ is an indicator for MWRA who had heard or seen a message related to breastfeeding or young child nutrition, $X_4$ is an indicator for MRWA who responded that she OR her and her partner jointly make decisions for all three categories: household purchases, healthcare, and visiting relatives, $X_5$ is an indicator for MRWA who belong to a women's community group, and $X_6$ is an indicator for MWRA MRWA who have given birth in the last 5 years and received antenatal care for their last pregnancy
+
+Interpretation of regression coefficients/odds:
+
+-   Intercept: When all other variables are set to zero, the odds of MWRA who agree giving only breast milk to the baby for the first 6 months is not difficult at all initiating breastfeeding early is -0.196. 
+
+-   $\beta_1$ : The odds of MWRA who agree giving only breast milk to the baby for the first 6 months is not difficult at all is about 0.0532 times higher for those that agree if a baby is exclusively breastfed for 6 months, he/she is less likely to be sick adjusting for the other predictors in the model.However, with a p-value of 0.836, this increase is not statistically significant, meaning we cannot confidently state that attitudes significantly influence the early initiation of breastfeeding in this context.
+
+-   $\beta_2$: The odds of MWRA who agree giving only breast milk to the baby for the first 6 months is not difficult at all is about 0.633 times higher for those that agree people in the community think it is healthy for a woman to give her baby only breast milk for the first 6 months adjusting for the other predictors in the model. The p-value of 0.004 indicates that this effect is statistically significant, suggesting that more negative community norms substantially decrease the likelihood of early initiation of breastfeeding.
+
+-   $\beta_3$: The odds of MWRA who agree giving only breast milk to the baby for the first 6 months is not difficult at all is about 1.76 times higher for those that have exposure to nutrition messages adjusting for the other predictors in the model.The very low p-value (< 0.001) makes this a highly statistically significant predictor, indicating that exposure to nutrition messages greatly increases the likelihood of early initiation.
+
+-   $\beta_4$: The odds of MWRA who agree giving only breast milk to the baby for the first 6 months is not difficult at all is about 0.0209 times higher for those that have combined decision-making scores (pertaining to decisions made jointly with partners on purchases, visits, and health seeking) adjusting for the other predictors in the model. With a p-value of 0.896, this influence is not statistically significant, indicating that decision-making, as measured, does not significantly affect early initiation of breastfeeding.
+
+-   $\beta_5$: The odds of MWRA who agree giving only breast milk to the baby for the first 6 months is not difficult at all is about 0.356 times higher for those that have women's groups adjusting for the other predictors in the model.The p-value of 0.005 indicates this effect is statistically significant, demonstrating that involvement in women's groups positively influences early initiation.
+
+-   $\beta_6$: The odds of MWRA who agree giving only breast milk to the baby for the first 6 months is not difficult at all is about 0.186 times less for those that have received antenatal care adjusting for the other predictors in the model. The p-value of 0.332 suggests that this decrease is not statistically significant, implying that receiving antenatal care, in this study, does not have a significant impact on early initiation of breastfeeding.
+
+```{r eib partial associations}
+# testing for an association between se_1 and know_1
+eib1_redk <- glm(se_1 ~ att_1 + pn_1 + exp + decision_combined + wg + received_antenatal_care,data = niger, family = binomial(link = "logit"))
+anova(eib1_redk, glm_eib_1, test = "LRT")
+
+# testing for an association between se_1 and att_1
+eib1_reda <- glm(se_1 ~ know_1 + pn_1 + exp + decision_combined + wg + received_antenatal_care,data = niger, family = binomial(link = "logit"))
+anova(eib1_reda, glm_eib_1, test = "LRT")
+
+# testing for an association between se_1 and pn_1
+eib1_redp <- glm(se_1 ~ know_1 + att_1 + exp + decision_combined + wg + received_antenatal_care,data = niger, family = binomial(link = "logit"))
+anova(eib1_redp, glm_eib_1, test = "LRT")
+
+# testing for an association between se_1 and exp
+eib1_rede <- glm(se_1 ~ know_1 + att_1 + pn_1 + decision_combined + wg + received_antenatal_care,data = niger, family = binomial(link = "logit"))
+anova(eib1_rede,glm_eib_1, test = "LRT")
+
+# testing for an association between se_1 and decision_combined
+eib1_redd <- glm(se_1 ~ know_1 + att_1 + pn_1 + exp + wg + received_antenatal_care,data = niger, family = binomial(link = "logit"))
+anova(eib1_redd, glm_eib_1, test = "LRT")
+
+# testing for an association between received_antenatal_care and se_1
+eib1_redr <- glm(se_1 ~ know_1 + att_1 + pn_1 + exp + wg + decision_combined,data = niger, family = binomial(link = "logit"))
+anova(eib1_redr,glm_eib_1, test = "LRT")
+
+# testing for an association between wg and se_1
+eib1_redw <- glm(se_1 ~ know_1 + att_1 + pn_1 + exp + received_antenatal_care + decision_combined,data = niger, family = binomial(link = "logit"))
+anova(eib1_redw,glm_eib_1, test = "LRT")
+
+```
+Based on the analysis of deviance, att_1, received_antenatal_care, and possibly decision_combined and wg, emerge as significant predictors with strong associations to the outcome. These variables not only improve model fit but also highlight key areas (like attitudes and healthcare engagement) that are crucial in influencing the studied behavior or condition. 
 
 ### Model 2:
+```{r fitting the updated mmf model 1}
+tidy(eib2_cut, conf.int = TRUE)
+
+odds_ratios_eib2_cut <- exp(coef(eib2_cut))
+odds_ratios_eib2_cut
+```
+logit($p_i$) = -1.26 + 0.200$X_1$ - 0.585$X_2$ + 1.61$X_3$ + 0.0416$X_4$ + 0.527$X_5$ + 1.33$X_6$
+where $p_i$ is the estimated likelihood of an MWRA reporting that they agree giving only breast milk to the baby for the first 6 months is not difficult at all, $X_1$ is an indicator for MRWA who agree if a baby is exclusively breastfed for 6 months, he/she is less likely to be sick, $X_2$ is an indicator for MWRA who agree people in the community think it is healthy for a woman to give her baby only breast milk for the first 6 months, $X_3$ is an indicator for MWRA who had heard or seen a message related to breastfeeding or young child nutrition, $X_4$ is an indicator for MRWA who responded that she OR her and her partner jointly make decisions for all three categories: household purchases, healthcare, and visiting relatives, $X_5$ is an indicator for MRWA who belong to a women's community group, and $X_6$ is an indicator for MWRA who have given birth in the years preceding the survey who delivered in a facility for their last birth
+
+Interpretation of regression coefficients/odds:
+
+-   Intercept: When all other variables are set to zero, the odds of MWRA who agree giving only breast milk to the baby for the first 6 months is not difficult at all initiating breastfeeding early is -1.26. 
+
+-   $\beta_1$ : The odds of MWRA who agree giving only breast milk to the baby for the first 6 months is not difficult at all is about 0.200 times higher for those that agree if a baby is exclusively breastfed for 6 months, he/she is less likely to be sick adjusting for the other predictors in the model. A p-value of 0.443 indicates that this effect is not statistically significant, indicating that while there is a positive association, it is not strong enough to confirm a definitive impact on the outcome. 
+
+-   $\beta_2$: The odds of MWRA who agree giving only breast milk to the baby for the first 6 months is not difficult at all is about 0.585 times less for those that agree people in the community think it is healthy for a woman to give her baby only breast milk for the first 6 months adjusting for the other predictors in the model.The p-value of 0.0115 indicates that this effect is statistically significant, suggesting that more negative community norms substantially decrease the likelihood of the outcome.
+ 
+
+-   $\beta_3$: The odds of MWRA who agree giving only breast milk to the baby for the first 6 months is not difficult at all is about 1.61 times higher for those that have exposure to nutrition messages adjusting for the other predictors in the model.The very low p-value (< 0.001) suggests this is a highly statistically significant predictor, indicating that exposure to nutrition messages greatly increases the likelihood of the outcome.
+
+
+-   $\beta_4$: The odds of MWRA who agree giving only breast milk to the baby for the first 6 months is not difficult at all is about 0.0416 times higher for those that have combined decision-making scores (pertaining to decisions made jointly with partners on purchases, visits, and health seeking) adjusting for the other predictors in the model. With a p-value of 0.797, this influence is not statistically significant, indicating that decision-making, as measured, does not significantly affect early initiation of breastfeeding.
+
+-   $\beta_5$: The odds of MWRA who agree giving only breast milk to the baby for the first 6 months is not difficult at all is about 0.527 times higher for those that have participation in women's groups adjusting for the other predictors in the model. The p-value of 8.72e-5 indicates this effect is statistically significant, demonstrating that involvement in women's groups positively influences early initiation.
+
+-   $\beta_6$: The odds of MWRA who agree giving only breast milk to the baby for the first 6 months is not difficult at all is about 1.33 times higher for those that have delivered in a facility adjusting for the other predictors in the model. The p-value of 2.39e-24  suggests that this increase is highly statistically significant, indicating that facility deliveries are a strong predictor of the outcome.
+
+
+```{r eib partial associations}
+# testing for an association between se_1 and know_1
+eib2_redk <- glm(se_1 ~ att_1 + pn_1 + exp + decision_combined + wg + fac_delivery,data = niger, family = binomial(link = "logit"))
+anova(eib2_redk, glm_eib_2, test = "LRT")
+
+# testing for an association between se_1 and att_1
+eib2_reda <- glm(se_1 ~ know_1 + pn_1 + exp + decision_combined + wg + fac_delivery,data = niger, family = binomial(link = "logit"))
+anova(eib1_reda, glm_eib_2, test = "LRT")
+
+# testing for an association between se_1 and pn_1
+eib2_redp <- glm(se_1 ~ know_1 + att_1 + exp + decision_combined + wg + fac_delivery,data = niger, family = binomial(link = "logit"))
+anova(eib1_redp, glm_eib_2, test = "LRT")
+
+# testing for an association between se_1 and exp
+eib2_rede <- glm(se_1 ~ know_1 + att_1 + pn_1 + decision_combined + wg + fac_delivery,data = niger, family = binomial(link = "logit"))
+anova(eib1_rede, glm_eib_2, test = "LRT")
+
+# testing for an association between wg and se_1
+eib2_redw <- glm(se_1 ~ know_1 + att_1 + pn_1 + exp + decision_combined + fac_delivery ,data = niger, family = binomial(link = "logit"))
+anova(eib2_redw, glm_eib_3, test = "LRT")
+
+# testing for an association between se_1 and decision_combined
+eib2_redd <- glm(se_1 ~ know_1 + att_1 + pn_1 + exp + wg + fac_delivery,data = niger, family = binomial(link = "logit"))
+anova(eib1_redd, glm_eib_2, test = "LRT")
+
+# testing for an association between fac_delivery and se_1
+eib2_redr <- glm(se_1 ~ know_1 + att_1 + pn_1 + exp + wg + decision_combined,data = niger, family = binomial(link = "logit"))
+anova(eib2_redr, glm_eib_2, test = "LRT")
+```
+Facility delivery and exposure to information are strong and significant in predicting the outcome.
+
 
 ### Model 3:
+```{r fitting the updated mmf model 1}
+tidy(eib3_cut, conf.int = TRUE)
+
+odds_ratios_eib3_cut <- exp(coef(eib3_cut))
+odds_ratios_eib3_cut
+```
+logit($p_i$) = -0.374 + 0.0625$X_1$ - 0.625$X_2$ + 1.75$X_3$ + 0.0488$X_4$ + 0.359$X_5$ - 0.000408$X_6$
+
+Interpretation of regression coefficients/odds:
+
+-   Intercept: When all other variables are set to zero, the odds of MWRA who agree giving only breast milk to the baby for the first 6 months is not difficult at all initiating breastfeeding early is -0.374. 
+
+-   $\beta_1$ : The odds of MWRA who agree giving only breast milk to the baby for the first 6 months is not difficult at all is about 0.0625 times higher for those that agree if a baby is exclusively breastfed for 6 months, he/she is less likely to be sick adjusting for the other predictors in the model. A p-value of 8.08e- 1 indicates that this effect is not statistically significant, indicating that while there is a positive association, it is not strong enough to confirm a definitive impact on the outcome. 
+
+-   $\beta_2$: The odds of MWRA who agree giving only breast milk to the baby for the first 6 months is not difficult at all is about 0.625 times less for those that agree people in the community think it is healthy for a woman to give her baby only breast milk for the first 6 months adjusting for the other predictors in the model.The p-value of 0.00449, which is less than 0.05, indicating that this effect is statistically significant and a strong predictor in the model.
+
+-   $\beta_3$: The odds of MWRA who agree giving only breast milk to the baby for the first 6 months is not difficult at all is about 1.75 times higher for those that have exposure to nutrition messages adjusting for the other predictors in the model. The very low p-value (< 0.001) suggests this is a highly statistically significant predictor, indicating that exposure to nutrition messages greatly increases the likelihood of the outcome.
+
+-   $\beta_4$: The odds of MWRA who agree giving only breast milk to the baby for the first 6 months is not difficult at all is about 0.0488 times higher for those that have combined decision-making scores (pertaining to decisions made jointly with partners on purchases, visits, and health seeking) adjusting for the other predictors in the model. With a p-value of 0.755, indicating that the influence of combined decision-making is not statistically significant.
+
+-   $\beta_5$: The odds of MWRA who agree giving only breast milk to the baby for the first 6 months is not difficult at all is about 0.359 times higher for those that have participation in women's groups adjusting for the other predictors in the model. The p-value of  0.00482, which is statistically significant, pointing to a meaningful impact of this predictor.
+
+-   $\beta_6$: The odds of MWRA who agree giving only breast milk to the baby for the first 6 months is not difficult at all is about 0.000408 times less for those that have delivered in a facility adjusting for the other predictors in the model. The p-value of 0.863, suggesting that this variable's impact is not statistically significant.
+
+
+```{r eib partial associations}
+# testing for an association between se_1 and know_1
+eib3_redk <- glm(se_1 ~ att_1 + pn_1 + exp + decision_combined + wg + nutrition,data = niger, family = binomial(link = "logit"))
+anova(eib3_redk, glm_eib_3, test = "LRT")
+
+# testing for an association between se_1 and att_1
+eib3_reda <- glm(se_1 ~ know_1 + pn_1 + exp + decision_combined + wg + nutrition,data = niger, family = binomial(link = "logit"))
+anova(eib1_reda, glm_eib_3, test = "LRT")
+
+# testing for an association between se_1 and pn_1
+eib3_redp <- glm(se_1 ~ know_1 + att_1 + exp + decision_combined + wg + nutrition,data = niger, family = binomial(link = "logit"))
+anova(eib3_redp, glm_eib_3, test = "LRT")
+
+# testing for an association between se_1 and exp
+eib3_rede <- glm(se_1 ~ know_1 + att_1 + pn_1 + decision_combined + wg + nutrition,data = niger, family = binomial(link = "logit"))
+anova(eib1_rede, glm_eib_3, test = "LRT")
+
+# testing for an association between se_1 and decision_combined
+eib3_redd <- glm(se_1 ~ know_1 + att_1 + pn_1 + exp + wg + nutrition,data = niger, family = binomial(link = "logit"))
+anova(eib3_redd, glm_eib_3, test = "LRT")
+
+# testing for an association between wg and se_1
+eib3_redw <- glm(se_1 ~ know_1 + att_1 + pn_1 + exp + decision_combined + nutrition ,data = niger, family = binomial(link = "logit"))
+anova(eib3_redw, glm_eib_3, test = "LRT")
+
+# testing for an association between nutrition and se_1
+eib3_redr <- glm(se_1 ~ know_1 + att_1 + pn_1 + exp + wg + decision_combined,data = niger, family = binomial(link = "logit"))
+anova(eib3_redr, glm_eib_3, test = "LRT")
+```
 
 ## Exclusive Initiation of Breastfeeding
 
