@@ -411,7 +411,7 @@ ggplot(data = aexib1, mapping = aes(x = .fitted, y = .std.resid)) +
   geom_hline(yintercept = 0) +
   geom_smooth(method = "loess", formula = y ~x)
 ```
-For the more complicated model, we have incredibly weak evidence of a model misspecification (p-value = 0.7709). However, for the model where know_1 is cut, we have strong evidence to suggest a model misspecification (p-value \< 0.001). Moreover, the Hosmer-Lemeshow goodness-of-fit test shows strong evidence of a lack of fit given the relatively small p-value (p-value = 0.0030638). Therefore, the original model glm_exib_1 is probably the better fit and will be the model we are interpreting.
+For the more complicated model, we have incredibly weak evidence of a model misspecification (p-value = 0.7709). However, for the model where know_1 is cut, we have strong evidence to suggest a model misspecification (p-value \< 0.001). Moreover, the Hosmer-Lemeshow goodness-of-fit test shows strong evidence of a lack of fit given the relatively small p-value (p-value = 0.0030638). Therefore, the cut model exib1_cut is probably the better fit and will be the model we are interpreting.
 
 ### Model 2:
 
@@ -442,7 +442,7 @@ ggplot(data = aexib2, mapping = aes(x = .fitted, y = .std.resid)) +
   geom_hline(yintercept = 0) +
   geom_smooth(method = "loess", formula = y ~x)
 ```
-For the more complicated model, we have incredibly weak evidence of a model misspecification (p-value = 0.9493). However, for the model where know_1 is cut, we have strong evidence to suggest a model misspecification (p-value \< 0.001). Moreover, the Hosmer-Lemeshow goodness-of-fit test shows strong evidence of a lack of fit given the relatively small p-value (p-value = 0.0058478). Therefore, the original model glm_exib_2 is probably the better fit and will be the model we are interpreting.
+For the more complicated model, we have incredibly weak evidence of a model misspecification (p-value = 0.9493). However, for the model where know_1 is cut, we have strong evidence to suggest a model misspecification (p-value \< 0.001). Moreover, the Hosmer-Lemeshow goodness-of-fit test shows strong evidence of a lack of fit given the relatively small p-value (p-value = 0.0058478). Therefore, the cut model exib2_cut is probably the better fit and will be the model we are interpreting.
 
 ### Model 3:
 
@@ -473,7 +473,7 @@ ggplot(data = aexib3, mapping = aes(x = .fitted, y = .std.resid)) +
   geom_hline(yintercept = 0) +
   geom_smooth(method = "loess", formula = y ~x)
 ```
-For the more complicated model, we have very weak evidence of a model misspecification (p-value = 0.1528). However, for the model where know_1 is cut, we have strong evidence to suggest a model misspecification (p-value \< 0.001). Moreover, the Hosmer-Lemeshow goodness-of-fit test shows strong evidence of a lack of fit given the small p-value (p-value = 0.00011565). Therefore, the original model glm_exib_3 is probably the better fit and will be the model we are interpreting.
+For the more complicated model, we have very weak evidence of a model misspecification (p-value = 0.1528). However, for the model where know_1 is cut, we have strong evidence to suggest a model misspecification (p-value \< 0.001). Moreover, the Hosmer-Lemeshow goodness-of-fit test shows strong evidence of a lack of fit given the small p-value (p-value = 0.00011565). Therefore, the cut model exib3_cut is probably the better fit and will be the model we are interpreting.
 
 ## Minimum Meal Frequency
 
