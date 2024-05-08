@@ -697,6 +697,18 @@ where $pi_i$ is the percentage of MWRA who agree giving only breast milk to the 
 
 ### Model 3:
 
+
+```{r fitting the updated exib model 3}
+tidy(exib3_cut, conf.int = TRUE)
+
+odds_ratios_exib3_cut <- exp(coef(exib3_cut))
+odds_ratios_exib3_cut
+```
+logit($p_i$) = -0.855 + 0.376$X_1$ + 1.956$X_2$ - 0.773$X_3$ + 1.461$X_4$ + 0.170$X_5$ + 0.363$X_6$ + 0.279$X_7$ + 1.391$X_8$ + 0.328$X_9$
+
+where $pi_i$ is the percentage of MWRA who agree giving only breast milk to the baby for the first 6 months is not difficult at all,  $X_1$ is the percentage of MWRA who agree if a baby is exclusively breastfed for 6 months, he/she is less likely to be sick, $X_2$ is the percentage of MRWA who say giving a child a minimum of 4 or more different types of food a day is not difficult at all, $X_3$ is the percentage of MRWA who agree people in the community think it is healthy for a woman to give her baby only breast milk for the first 6 months $X_4$ is the percentage of MWRA who had heard or seen a message related to breastfeeding or young child nutrition from the radio, health worker, or community event in the past 3 months, $X_5$ is the Percentage of MRWA who responded that she OR her and her partner jointly make decisions for all three categories: household purchases, healthcare, and visiting relatives, $X_6$ is the Percentage of MRWA who belong to a women's community group, and $X_7$ is an indicator for MWRA who spoke with a family member about their child's nutrition, $X_8$ is an indicator for MWRA who spoke with a healthcare worker about their child's nutrition, $X_9$ is an indicator for MWRA who spoke to nobody about their child's nutrition (speaking to husband is the base class)
+
+
 ## Minimum Meal Frequency
 
 ### Model 1:
