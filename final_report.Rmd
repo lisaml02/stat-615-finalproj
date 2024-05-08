@@ -781,6 +781,40 @@ odds_ratios_exib2_cut
 logit($p_i$) = -1.549 + 0.518$X_1$ + 1.706$X_2$ - 0.574$X_3$ + 1.445$X_4$ + 0.036$X_5$ + 0.508$X_6$ + 1.084$X_7$
 where $pi_i$ is the percentage of MWRA who agree giving only breast milk to the baby for the first 6 months is not difficult at all,  $X_1$ is the percentage of MWRA who agree if a baby is exclusively breastfed for 6 months, he/she is less likely to be sick, $X_2$ is the percentage of MRWA who say giving a child a minimum of 4 or more different types of food a day is not difficult at all, $X_3$ is the percentage of MRWA who agree people in the community think it is healthy for a woman to give her baby only breast milk for the first 6 months $X_4$ is the percentage of MWRA who had heard or seen a message related to breastfeeding or young child nutrition from the radio, health worker, or community event in the past 3 months, $X_5$ is the Percentage of MRWA who responded that she OR her and her partner jointly make decisions for all three categories: household purchases, healthcare, and visiting relatives, $X_6$ is the Percentage of MRWA who belong to a women's community group, and $X_7$ is the percentage of MRWA who have given birth in the years preceding the survey who delivered in a facility for their last birth.
 
+```{r confidence intervals exib 2}
+# for intercept
+exp(-2.11)
+exp(-0.99)
+
+# for att_1
+exp(0.08)
+exp(0.96)
+
+# for se_3
+exp(1.39)
+exp(2.02)
+
+# for pn_1
+exp(-0.92)
+exp(-0.23)
+
+# exp
+exp(1.23)
+exp(1.65)
+
+# decision_combined
+exp(-0.23)
+exp(0.30)
+
+# wg
+exp(0.29)
+exp(0.72)
+    
+ #fac_delivery
+ exp(0.87)
+ exp(1.29)
+```
+
 ```{r exib 2 associations}
 exib2_red <- glm(se_1 ~ 1, data = niger, family = binomial(link = "logit"))
 anova(exib2_red, exib2_cut, test = "LRT")
