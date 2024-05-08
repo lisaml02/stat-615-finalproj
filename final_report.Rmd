@@ -790,6 +790,49 @@ anova(exib3_red, exib3_cut, test = "LRT")
 ```
 there is statistically significant evidence that at least one of the predictors is associated with the percentage of MWRA who agree giving only breast milk to the baby for the first 6 months is not difficult at all.
 
+```{r exib 3 associations}
+exib3_red <- glm(se_1 ~ 1, data = niger, family = binomial(link = "logit"))
+anova(exib3_red, exib3_cut, test = "LRT")
+```
+there is statistically significant evidence that at least one of the predictors is associated with the percentage of MWRA who agree giving only breast milk to the baby for the first 6 months is not difficult at all.
+
+```{r exib 2 associations}
+exib2_red <- glm(se_1 ~ 1, data = niger, family = binomial(link = "logit"))
+anova(exib2_red, exib2_cut, test = "LRT")
+```
+there is statistically significant evidence that at least one of the predictors is associated with the percentage of MWRA who agree giving only breast milk to the baby for the first 6 months is not difficult at all.
+
+```{r exib partial associations}
+# testing for an association between att_1 and se_1
+exib3_reds <- glm(se_1 ~  se_3 + pn_1 + exp + decision_combined + wg + nutrition, data = niger, family = binomial(link = "logit"))
+anova(exib3_reds, exib3_cut, test = "LRT")
+
+# testing for an association between se_3 and se_1
+exib3_redp <- glm(se_1 ~  att_1 + pn_1 + exp + decision_combined + wg + nutrition, data = niger, family = binomial(link = "logit"))
+anova(exib3_redp, exib3_cut, test = "LRT")
+
+# testing for an association between exp and se_1
+exib3_rede <- glm(se_1 ~ att_1 + se_3 + pn_1 + decision_combined + wg + nutrition, data = niger, family = binomial(link = "logit"))
+anova(exib3_rede, exib3_cut, test = "LRT")
+
+# testing for an association between pn_1 and se_1
+exib3_redd <- glm(se_1 ~ att_1 + se_3 + exp + decision_combined + wg + nutrition, data = niger, family = binomial(link = "logit"))
+anova(exib3_redd, exib3_cut, test = "LRT")
+
+# testing for an association between wg and se_1
+
+exib3_redw <- glm(se_1 ~ att_1 + se_3 + pn_1 + exp + decision_combined + nutrition, data = niger, family = binomial(link = "logit"))
+anova(exib3_redw, exib3_cut, test = "LRT")
+
+# testing for an association between nutrition and se_1
+exib3_reda <- glm(se_1 ~ att_1 + se_3 + pn_1 + exp + decision_combined + wg, data = niger, family = binomial(link = "logit"))
+anova(exib3_reda, exib3_cut, test = "LRT")
+
+# testing for an association between decision_combined and se_1
+exib3_redq <- glm(se_1 ~ att_1 + se_3 + pn_1 + exp + wg + nutrition, data = niger, family = binomial(link = "logit"))
+anova(exib3_redq, exib3_cut, test = "LRT")
+```
+there is very strong evidence that indicates that se_1 is associated with se_3,  exp,  pn_1, wg, and nutrition with extremely low p-values close to 0. There is moderate to weak evidence of association between se_1 and decision_combined with a p-value of 0.2132. There is moderate to strong evidence of association between se_1 and att_1 with a p-value of 0.08356.
 
 
 ## Minimum Meal Frequency
