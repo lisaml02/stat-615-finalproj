@@ -1253,7 +1253,39 @@ odds_ratios_mdd3_cut
 mdd3_red <- glm(know_3 ~ 1, data = niger, family = binomial(link = "logit"))
 anova(mdd3_red, mdd3_cut, test = "LRT")
 ```
+```{r partial associations mdd3}
+# testing for an association between know_2 and know_3
+mdd3_reda <- glm(know_3 ~ att_3 + se_3 + pn_3 + wg + decision_combined + exp + nutrition, data = niger, family = binomial(link = "logit"))
+anova(mdd3_reda, glm_mdd_3, test = "LRT")
 
+# testing for an association between att_3 and know_3
+mdd3_reds <- glm(know_3 ~ know_2 + se_3 + pn_3 + wg + decision_combined + exp + nutrition, data = niger, family = binomial(link = "logit"))
+anova(mdd3_reds, glm_mdd_3, test = "LRT")
+
+# testing for an association between se_3 and know_3
+mdd3_redw <- glm(know_3 ~ know_2 + att_3 + se_3 + pn_3 + wg + decision_combined + exp + nutrition, data = niger, family = binomial(link = "logit"))
+anova(mdd3_redw, glm_mdd_3, test = "LRT")
+
+# testing for an association between pn_3 and know_3
+mdd3_redd <- glm(know_3 ~ know_2 + att_3 + se_3 + wg + decision_combined + exp + nutrition, data = niger, family = binomial(link = "logit"))
+anova(mdd3_redd, glm_mdd_3, test = "LRT")
+
+# testing for an association between wg and know_3
+mdd3_rede <- glm(know_3 ~ know_2 + att_3 + se_3 + pn_3 + decision_combined + exp + nutrition, data = niger, family = binomial(link = "logit"))
+anova(mdd3_rede, glm_mdd_3, test = "LRT")
+
+# testing for an association between decision_combined and know_3
+mdd3_redq <- glm(know_3 ~ know_2 + att_3 + se_3 + pn_3 + wg  + exp + nutrition, data = niger, family = binomial(link = "logit"))
+anova(mdd3_redq, glm_mdd_3, test = "LRT")
+
+# testing for an association between exp and know_3
+mdd3_redr <- glm(know_3 ~ know_2 + att_3 + se_3 + pn_3 + wg + decision_combined + nutrition, data = niger, family = binomial(link = "logit"))
+anova(mdd3_redr, glm_mdd_3, test = "LRT")
+
+# testing for an association between nutrition and know_3
+mdd3_redz <- glm(know_3 ~ know_2 + att_3 + se_3 + pn_3 + wg + decision_combined + exp, data = niger, family = binomial(link = "logit"))
+anova(mdd3_redz, glm_mdd_3, test = "LRT")
+```
 
 # Critiques/Expansion of Analysis
 
