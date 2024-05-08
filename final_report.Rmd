@@ -13,7 +13,6 @@ knitr::opts_chunk$set(echo = TRUE)
 
 ## by Lisa Liubovich, Remy Sorensen, and Hawa Toumbou
 
-\* This should be an executive summary with lots of bullet points. Don't make me read text not immediate relevant to the project. No yapping. \* - from the instructions :)
 
 # Introduction
 
@@ -103,11 +102,9 @@ niger$nutrition <- cut(as.numeric(niger$nutrition), breaks = c(0, 1, 2, 3, 99), 
 
 ```
 
-summarize the models we used and the methods we used to create them (ie. if we're going to end up using auto selection, why we included controls in some models and not others, how we selected variables)
-
 Our models were constructed based on the variables identified in Table 1 , Table 3, and Table 4 within the article. The variables chosen are based on our best approximation of these identified variables (see critiques section for further details).
 
-Two out of the four IYCF practices below do not contain control variables in their 3 models in order to demonstrate the effect of having more than 10 predictors versus less than 10 predictors in a multiple linear regression model and to prevent over-fitting.
+Our models below do not contain control variables i in order to prevent overfitting.
 
 ## Early Initiation of Breastfeeding
 
@@ -293,7 +290,6 @@ odds_ratios_mdd3
 
 # Assumptions
 
-check assumptions for logistic regression model
 
 ## Early Initiation of Breastfeeding
 
