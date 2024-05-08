@@ -599,6 +599,7 @@ ggplot(data = amdd1, mapping = aes(x = .fitted, y = .std.resid)) +
   geom_hline(yintercept = 0) +
   geom_smooth(method = "loess", formula = y ~x)
 ```
+When compared to the more complicated model, there is weak evidence of a misspecification (p-value = 0.7165). However, there is strong evidence to suggest misspecification when comparing the original model to the one where att_2 is cut (p-value \< 0.001). Moreover, the Hosmer-Lemeshow test has an extremely small p-value (p-value \< 0.001), which indicates that there is relatively strong evidence of a lack of fit. Therefore, the model that will be evaluated/intrepreted will be mdd1_cut.
 
 ### Model 2:
 ```{r assumptions mdd 2}
