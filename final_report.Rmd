@@ -1183,9 +1183,28 @@ We have very strong evidence to suggest an association between se_2 and know_2 (
 
 ### Model 1:
 
+```{r fitting the updated mdd model 1}
+tidy(mdd1_cut, conf.int = TRUE)
+
+odds_ratios_mdd1_cut <- exp(coef(mdd1_cut))
+odds_ratios_mdd1_cut
+```
 ### Model 2:
 
+```{r fitting the updated mdd model 2}
+tidy(mdd2_cut, conf.int = TRUE)
+
+odds_ratios_mdd2_cut <- exp(coef(mdd2_cut))
+odds_ratios_mdd2_cut
+```
+
 ### Model 3:
+```{r fitting the updated mdd model 3}
+tidy(mdd3_cut, conf.int = TRUE)
+
+odds_ratios_mdd3_cut <- exp(coef(mdd3_cut))
+odds_ratios_mdd3_cut
+```
 
 # Critiques/Expansion of Analysis
 
