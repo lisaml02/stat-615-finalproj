@@ -981,7 +981,14 @@ exp(0.72)
  exp(0.87)
  exp(1.29)
 ```
-
+intercept: When all predictors are at their reference level, the odds of a MWRA reporting that a child 6-23 months should eat 4 or more different types of food a day is approximately 0.508 times (between 0.21 and 0.37 times in 95% of repeated samples) more than when all predictors are at their alternative levels.
+$\beta_1$: The odds of a MWRA reporting that if a baby is exclusively breastfed for 6 months, he/she is less likely to be sick is about 1.5 times more (between 1.08 and 2.61 times more in 95% of repeated samples) for MWRA who agree compared to MWRA who do not agree, adjusting for the other predictors in the model.
+$\beta_2$: The odds of a MWRA reporting that giving a child a minimum of 4 or more different types of food a day is not difficult at all is about 7.9 times more (between 4.01 and 7.53 times more in 95% of repeated samples) for MWRA who say it is not difficult compared to MWRA who find it difficult, adjusting for the other predictors in the model.
+$\beta_3$: The odds of a MWRA reporting that people in the community think it is healthy for a woman to give her baby only breast milk for the first 6 months is about 0.48 times (between 0.39 and 0.79 times in 95% of repeated samples) more for MWRA who agree compared to MWRA who do not agree, adjusting for the other predictors in the model.
+$\beta_4$: The odds of a MWRA reporting that giving only breast milk to the baby for the first 6 months is not difficult at all is about 4.86 times more (between 2.39 and 3.64 times more in 95% of repeated samples) for MWRA who had heard or seen a message related to breastfeeding or young child nutrition compared to MWRA who were not exposed to these messages, adjusting for the other predictors in the model.
+$\beta_5$: The odds of a MWRA reporting that she OR her and her partner jointly make decisions for all three categories: household purchases, healthcare, and visiting relatives is about 1.02 times more (between 0.79 and 1.34 times more in 95% of repeated samples) for MWRA who responded in the affirmative compared to MWRA who do not, adjusting for the other predictors in the model.
+$\beta_6$: The odds of a MWRA reporting that belonging to a women's community group is not difficult at all is about 1.5 times more (between 1.33 and 2.05 times more in 95% of repeated samples) for MWRA who belong to such a group compared to MWRA who do not, adjusting for the other predictors in the model.
+$\beta_7$: The odds of a MWRA reporting that having a facility delivery for their last birth is not difficult at all is about 0.86 times (between 2.39 and 3.63 times more in 95% of repeated samples) for MWRA who delivered in a facility compared to MWRA who did not, adjusting for the other predictors in the model.
 ```{r exib 2 associations}
 exib2_red <- glm(se_1 ~ 1, data = niger, family = binomial(link = "logit"))
 anova(exib2_red, exib2_cut, test = "LRT")
@@ -1065,6 +1072,19 @@ exp(0.56)
     
  
 ```
+Interpretation:
+
+Intercept: When all predictors are at their reference level, the odds of a MWRA reporting that a child 6-23 months should eat 4 or more different types of food a day is approximately 0.425 times (between 0.25 and 0.73 times in 95% of repeated samples) more than when all predictors are at their alternative levels.
+$\beta_1$: The odds of a MWRA reporting that if a baby is exclusively breastfed for 6 months, he/she is less likely to be sick is about 1.46 times more (between 0.96 and 2.25 times more in 95% of repeated samples) for MWRA who agree compared to MWRA who do not agree, adjusting for the other predictors in the model.
+
+$\beta_2$: The odds of a MWRA reporting that giving a child a minimum of 4 or more different types of food a day is not difficult at all is about 7.07 times more (between 5.2 and 9.6 times more in 95% of repeated samples) for MWRA who say it is not difficult compared to MWRA who find it difficult, adjusting for the other predictors in the model.
+
+$\beta_3$: The odds of a MWRA reporting that people in the community think it is healthy for a woman to give her baby only breast milk for the first 6 months is about 0.46 times (between 0.32 and 0.64 times in 95% of repeated samples) more for MWRA who agree compared to MWRA who do not agree, adjusting for the other predictors in the model.
+
+$\beta_4$: The odds of a MWRA reporting that giving only breast milk to the baby for the first 6 months is not difficult at all is about 4.31 times more (between 3.5 and 5.3 times more in 95% of repeated samples) for MWRA who had heard or seen a message related to breastfeeding or young child nutrition compared to MWRA who were not exposed to these messages, adjusting for the other predictors in the model.
+$\beta_5$: The odds of a MWRA reporting that she OR her and her partner jointly make decisions for all three categories: household purchases, healthcare, and visiting relatives is about 1.18 times more (between 0.91 and 1.55 times more in 95% of repeated samples) for MWRA who responded in the affirmative compared to MWRA who do not, adjusting for the other predictors in the model.
+
+$\beta_6$: The odds of a MWRA reporting that belonging to a women's community group is not difficult at all is about 1.44 times more (between 1.44 and 1.75 times more in 95% of repeated samples) for MWRA who belong to such a group compared to MWRA who do not, adjusting for the other predictors in the model.
 
 ```{r exib 3 associations}
 exib3_red <- glm(se_1 ~ 1, data = niger, family = binomial(link = "logit"))
