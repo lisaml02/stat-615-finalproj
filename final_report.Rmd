@@ -719,7 +719,7 @@ anova(exib1_reda, exib1_cut, test = "LRT")
 exib1_redq <- glm(se_1 ~ att_1 + se_3 + pn_1 + exp + wg + received_antenatal_care, data = niger, family = binomial(link = "logit"))
 anova(exib1_redq, exib1_cut, test = "LRT")
 ```
-
+we have very strong evidence that indicates that se_1 is associated with se_3,  exp,  pn_1, and wg--all with (p-value < 0.001). There is moderate evidence of association between se_1 and att_1 with a p-value of 0.06366. There is moderate to weak evidence of association between se_1 and recieved_antenetal_care with a p-value of 0.2557. There is weak evidence of association between se_1 and decision_combined with a p-value of 0.8815.
 
 ### Model 2:
 
