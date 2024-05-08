@@ -1189,6 +1189,12 @@ tidy(mdd1_cut, conf.int = TRUE)
 odds_ratios_mdd1_cut <- exp(coef(mdd1_cut))
 odds_ratios_mdd1_cut
 ```
+```{r overall associations mdd1}
+mdd1_red <- glm(know_3 ~ 1, data = niger, family = binomial(link = "logit"))
+anova(mdd1_red, mdd1_cut, test = "LRT")
+```
+
+
 ### Model 2:
 
 ```{r fitting the updated mdd model 2}
@@ -1197,6 +1203,11 @@ tidy(mdd2_cut, conf.int = TRUE)
 odds_ratios_mdd2_cut <- exp(coef(mdd2_cut))
 odds_ratios_mdd2_cut
 ```
+```{r overall associations mdd2}
+mdd2_red <- glm(know_3 ~ 1, data = niger, family = binomial(link = "logit"))
+anova(mdd2_red, mdd2_cut, test = "LRT")
+```
+
 
 ### Model 3:
 ```{r fitting the updated mdd model 3}
@@ -1205,6 +1216,11 @@ tidy(mdd3_cut, conf.int = TRUE)
 odds_ratios_mdd3_cut <- exp(coef(mdd3_cut))
 odds_ratios_mdd3_cut
 ```
+```{r overall associations mdd3}
+mdd3_red <- glm(know_3 ~ 1, data = niger, family = binomial(link = "logit"))
+anova(mdd3_red, mdd3_cut, test = "LRT")
+```
+
 
 # Critiques/Expansion of Analysis
 
